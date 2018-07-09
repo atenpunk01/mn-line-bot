@@ -1,1 +1,1 @@
-web: java -jar target/mn-line-bot.jar
+web: java -jar target/java-getting-started-1.0.jar
