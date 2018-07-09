@@ -84,39 +84,30 @@ public class Main {
 	private DataSource dataSource;
 
 	public static void main(String[] args) throws Exception {
-//		SpringApplication.run(Main.class, args);
+		SpringApplication.run(Main.class, args);
 		
-		String json = "{\"events\" : [{\"type\" : \"message\""
-				+ ",\"replyToken\" : \"bd831a2ec52b4ae7b4819e548fb7b003\""
-				+ ",\"source\" : {\"userId\" : \"U79470d76b4dc7374df59e6ac1f98cc39\""
-				+ ",\"type\" : \"user\"}"
-				+ ",\"timestamp\" : "+new Date().getTime()
-				+ ",\"message\" : {\"type\" : \"text\""
-				+ ",\"id\" : \"8239817892637\""
-				+ ",\"text\" : \"dddd\"}}]}";		
-
-		System.out.println(json);
-		JSONObject jsonObj = new JSONObject(json);
-		JSONArray events = jsonObj.getJSONArray("events");
-        String replyToken = events.getJSONObject(0).getString("replyToken");
-		JSONObject source = events.getJSONObject(0).getJSONObject("source");
-        String userId = source.getString("userId");
-		JSONObject message = events.getJSONObject(0).getJSONObject("message");
-        String id = message.getString("id");
-        String text = message.getString("text");
-		System.out.println("replyToken : "+replyToken);
-		System.out.println("userId     : "+userId);
-		System.out.println("id         : "+id);
-		System.out.println("text       : "+text);
-        
-		
-//		String json = "{\"replyToken\":\"bd831a2ec52b4ae7b4819e548fb7b003\","
-//				+ "\"messages\":[{"
-//				+ "\"type\":\"text\","
-//				+ "\"text\":\"Hello, user\"},{"
-//				+ "\"type\":\"text\","
-//				+ "\"text\":\"May I help you?\""
-//				+ "}]}";
+//		String json = "{\"events\" : [{\"type\" : \"message\""
+//				+ ",\"replyToken\" : \"bd831a2ec52b4ae7b4819e548fb7b003\""
+//				+ ",\"source\" : {\"userId\" : \"U79470d76b4dc7374df59e6ac1f98cc39\""
+//				+ ",\"type\" : \"user\"}"
+//				+ ",\"timestamp\" : "+new Date().getTime()
+//				+ ",\"message\" : {\"type\" : \"text\""
+//				+ ",\"id\" : \"8239817892637\""
+//				+ ",\"text\" : \"dddd\"}}]}";		
+//
+//		System.out.println(json);
+//		JSONObject jsonObj = new JSONObject(json);
+//		JSONArray events = jsonObj.getJSONArray("events");
+//        String replyToken = events.getJSONObject(0).getString("replyToken");
+//		JSONObject source = events.getJSONObject(0).getJSONObject("source");
+//        String userId = source.getString("userId");
+//		JSONObject message = events.getJSONObject(0).getJSONObject("message");
+//        String id = message.getString("id");
+//        String text = message.getString("text");
+//		System.out.println("replyToken : "+replyToken);
+//		System.out.println("userId     : "+userId);
+//		System.out.println("id         : "+id);
+//		System.out.println("text       : "+text);
 		
 //		callEvent("RN44whRTGt70ipZGd3Ijb06zBaBdx9TVHl20patqS2Mxd9gEkeb6Eth6mWm+evAKiplSDHTeRZZhNhUDOlCCmwWMz4Pg1IxoCTCD6kUYyi6YlabByo0R2t3FYObvLobXSfVn+X3YrcUzHhJ9So14kAdB04t89/1O/w1cDnyilFU=", json);
 	}
