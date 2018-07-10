@@ -166,8 +166,8 @@ public class Application extends SpringBootServletInitializer {
 					response.append(inputLine);
 				}
 				in.close();
-				System.out.println(response.toString());
-				System.out.println("listGraviex.size : "+listGraviex.size());
+//				System.out.println(response.toString());
+//				System.out.println("listGraviex.size : "+listGraviex.size());
 
 				JSONObject json = new JSONObject(response.toString());
 				for (CoinModel coinModel : listGraviex) {
