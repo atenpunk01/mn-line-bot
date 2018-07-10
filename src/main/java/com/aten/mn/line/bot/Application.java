@@ -297,7 +297,7 @@ public class Application extends SpringBootServletInitializer {
 								long hours = (TimeUnit.SECONDS.toHours(seconds) - (day*24));
 								long minute = (TimeUnit.SECONDS.toMinutes(seconds) - ((day*24*60)+(hours*60)));
 								data = data + "\nCollateral "+df0.format(changeCollateral)+" at block "+df0.format(changeBlock);
-								data = data + "\nTime left day "+day+" hour "+hours+" minute "+minute;
+								data = data + "\nTime left "+day+" day "+hours+" hour "+minute+" minute";
 								break;
 							}
 						}
