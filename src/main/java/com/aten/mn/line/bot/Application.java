@@ -52,6 +52,7 @@ public class Application extends SpringBootServletInitializer {
 	}
 
 	public static void main(String[] args) {
+
 		SpringApplication.run(Application.class, args);
 
 	}
@@ -84,6 +85,7 @@ public class Application extends SpringBootServletInitializer {
 				for (CoinModel m : list2) {
 					message += m.getName() + "\n Buy : " + m.getBuy() + "\n Sell : " + m.getSell() + "\n";
 				}
+				message += masternodeOnline(coin.toUpperCase());
 				String replyToken = messageEvent.getReplyToken();
 				balasChatDenganRandomJawaban(replyToken, message);
 			}else if(pesan.equals("atenpunk")){
@@ -119,6 +121,84 @@ public class Application extends SpringBootServletInitializer {
 		}
 	}
 
+	public static String masternodeOnline(String coin) {
+		String data = "";
+		try {
+
+			TrustManager[] trustAllCerts = new TrustManager[]{new X509TrustManager() {
+				@Override
+				public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+					return null;
+				}
+
+				@Override
+				public void checkClientTrusted(X509Certificate[] certs,
+						String authType) {
+				}
+
+				@Override
+				public void checkServerTrusted(X509Certificate[] certs,
+						String authType) {
+				}
+			}};
+
+			SSLContext sc = SSLContext.getInstance("SSL");
+			sc.init(null, trustAllCerts, new java.security.SecureRandom());
+			HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+			URL url = new URL("https://masternodes.online/currencies/"+coin+"/");
+			HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
+			//			connection.addRequestProperty("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
+			//			connection.addRequestProperty("Accept-Encoding", "gzip, deflate, br");
+			connection.addRequestProperty("Accept-Language", "th,en-US;q=0.7,en;q=0.3");
+			//			connection.addRequestProperty("Connection", "keep-alive");
+			//			connection.addRequestProperty("Cookie", "XSRF-TOKEN=AbLt5dZOyRlPWqot3nBGz0fmBh%2F5Sy%2FzkOGRblJUMmo%3D; _peatio_session=5efb8487874d373d2c253b94ae9c9f11; lang=en");
+			//			connection.addRequestProperty("Host", "graviex.net");
+			//			connection.addRequestProperty("If-None-Match", "b7fcd10e801effd9b708c4ee625911e7");
+			//			connection.addRequestProperty("Upgrade-Insecure-Requests", "1");
+			connection.addRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:61.0) Gecko/20100101 Firefox/61.0");
+			connection.setDoOutput(true);
+			connection.connect();
+
+			int statusCode = connection.getResponseCode();
+			if (statusCode == 200) {
+				String responseMsg = connection.getResponseMessage();
+				System.out.println(responseMsg);
+				BufferedReader in = new BufferedReader(
+						new InputStreamReader(connection.getInputStream()));
+				String inputLine;
+				StringBuffer response = new StringBuffer();
+
+				boolean chk = false;
+				while ((inputLine = in.readLine()) != null) {
+					if(inputLine.contains("Active masternodes")) {
+						chk = true;
+						response.append(inputLine);
+					}else if(inputLine.contains("Coins locked")) {
+						chk = true;
+						response.append(inputLine);
+					}else {
+						if(chk) {
+							chk = false;
+							response.append(inputLine+"\n");
+						}
+					}					
+				}
+				in.close();
+
+				data = response.toString().trim().replaceAll("	", "");
+				data = data.replaceAll("</td>", "");
+				data = data.replaceAll("<td>", "");
+				System.out.println(data);
+
+			} else {
+				throw new Exception("Error:(StatusCode)" + statusCode + ", " + connection.getResponseMessage());
+			}
+			connection.disconnect();
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return data;
+	}
 
 	public static List<CoinModel> priceGraviex(List<CoinModel> listGraviex) {
 		List<CoinModel> list = new ArrayList<CoinModel>();
