@@ -16,9 +16,15 @@
 #This is tempalte file for configuration.
 #Please copy as `application.yml` and change your value.
 
+#line.bot:
+#  channel-token: dEKqNnLrnTyiRsDsSiipUVoaWRLyfPoIyJG2YQG7dw1DPtS0r601zjHQI5ZJ7m7L1JdOWHZu3bItvsmiS2hMwQaRbedClDToc2ybq3r4nIOH5AKTV8K3GwepWKZQPCFFCc8Uht35HvBr7h1GA+IC/QdB04t89/1O/w1cDnyilFU=
+#  channel-secret: 524505ebdac42ed73fc7551174faecf4
+#  handler.path: /callback
+
+
 line.bot:
-  channel-token: dEKqNnLrnTyiRsDsSiipUVoaWRLyfPoIyJG2YQG7dw1DPtS0r601zjHQI5ZJ7m7L1JdOWHZu3bItvsmiS2hMwQaRbedClDToc2ybq3r4nIOH5AKTV8K3GwepWKZQPCFFCc8Uht35HvBr7h1GA+IC/QdB04t89/1O/w1cDnyilFU=
-  channel-secret: 524505ebdac42ed73fc7551174faecf4
+  channel-token: 5cZDRG6sKJNWe/+2plbkQq5XoualYDEUeszt/VfB7FDgEtIv3uf+nr7z5wq+3oGIiplSDHTeRZZhNhUDOlCCmwWMz4Pg1IxoCTCD6kUYyi5jTn7fejUdjxzc5VqvuLdgGveufaO1WWIidwSmZt5jeQdB04t89/1O/w1cDnyilFU=
+  channel-secret: edc04a65a9d4daad51a96b1d8466708a
   handler.path: /callback
 
 # To remove Client wire logs. Please comment out following lines.
