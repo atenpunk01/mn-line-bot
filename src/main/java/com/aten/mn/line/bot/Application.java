@@ -54,6 +54,8 @@ public class Application extends SpringBootServletInitializer {
 	public static void main(String[] args) {
 
 		SpringApplication.run(Application.class, args);
+		
+//		masternodeOnline("DASH");
 
 	}
 
@@ -176,6 +178,8 @@ public class Application extends SpringBootServletInitializer {
 					}else if(inputLine.contains("Coins locked")) {
 						chk = true;
 						response.append(inputLine);
+					}else if(inputLine.contains("Last "+coin+" block")) {
+						response.append(inputLine.split("generated")[0]);
 					}else {
 						if(chk) {
 							chk = false;
@@ -188,6 +192,8 @@ public class Application extends SpringBootServletInitializer {
 				data = response.toString().trim().replaceAll("	", "");
 				data = data.replaceAll("</td>", "");
 				data = data.replaceAll("<td>", "");
+				data = data.replaceAll(":", " : ");
+				data = data.replaceAll(coin+" ", "");
 				System.out.println(data);
 
 			} else {
