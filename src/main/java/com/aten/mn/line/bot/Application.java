@@ -180,6 +180,9 @@ public class Application extends SpringBootServletInitializer {
 						response.append(inputLine);
 					}else if(inputLine.contains("Last "+coin+" block")) {
 						response.append(inputLine.split("generated")[0]);
+					}else if(inputLine.contains("AVG block time")) {
+						chk = true;
+						response.append(inputLine);
 					}else {
 						if(chk) {
 							chk = false;
