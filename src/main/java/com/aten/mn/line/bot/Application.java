@@ -58,38 +58,43 @@ public class Application extends SpringBootServletInitializer {
 
 	@EventMapping
 	public void handleTextEvent(MessageEvent<TextMessageContent> messageEvent){
-		String pesan = messageEvent.getMessage().getText().toLowerCase();
-		String[] pesanSplit = pesan.split(" ");
+		try {
+			String pesan = messageEvent.getMessage().getText().toLowerCase();
 
-		if(pesanSplit[0].contains("/price")) {
-			String coin = pesanSplit[1];
-			System.out.println("coin : "+coin);
-			List<CoinModel> listGraviex = new ArrayList<CoinModel>();
-			List<CoinModel> listCryptoBridge = new ArrayList<CoinModel>();
-			CoinModel modelG = new CoinModel();
-			modelG.setName(coin.toUpperCase());
-			modelG.setKey(coin.toLowerCase()+"btc");
-			listGraviex.add(modelG);
-			CoinModel modelC = new CoinModel();
-			modelC.setName(coin.toUpperCase());
-			modelC.setKey(coin.toUpperCase()+"_BTC");
-			listCryptoBridge.add(modelC);
-			List<CoinModel> list1 = priceGraviex(listGraviex);
-			List<CoinModel> list2 = priceCryptoBridge(listCryptoBridge);
-			String message = "";
-			for (CoinModel m : list1) {
-				message += m.getName() + "\n Buy : " + m.getBuy() + "\n Sell : " + m.getSell() + "\n";
+			if(pesan.contains("/p")) {
+				String[] pesanSplit = pesan.split(" ");
+				String coin = pesanSplit[1];
+				System.out.println("coin : "+coin);
+				List<CoinModel> listGraviex = new ArrayList<CoinModel>();
+				List<CoinModel> listCryptoBridge = new ArrayList<CoinModel>();
+				CoinModel modelG = new CoinModel();
+				modelG.setName(coin.toUpperCase());
+				modelG.setKey(coin.toLowerCase()+"btc");
+				listGraviex.add(modelG);
+				CoinModel modelC = new CoinModel();
+				modelC.setName(coin.toUpperCase());
+				modelC.setKey(coin.toUpperCase()+"_BTC");
+				listCryptoBridge.add(modelC);
+				List<CoinModel> list1 = priceGraviex(listGraviex);
+				List<CoinModel> list2 = priceCryptoBridge(listCryptoBridge);
+				String message = "";
+				for (CoinModel m : list1) {
+					message += m.getName() + "\n Buy : " + m.getBuy() + "\n Sell : " + m.getSell() + "\n";
+				}
+				for (CoinModel m : list2) {
+					message += m.getName() + "\n Buy : " + m.getBuy() + "\n Sell : " + m.getSell() + "\n";
+				}
+				String replyToken = messageEvent.getReplyToken();
+				balasChatDenganRandomJawaban(replyToken, message);
+			}else if(pesan.equals("atenpunk")){
+				String jawaban = getRandomJawaban();
+				String replyToken = messageEvent.getReplyToken();
+				balasChatDenganRandomJawaban(replyToken, jawaban);
 			}
-			for (CoinModel m : list2) {
-				message += m.getName() + "\n Buy : " + m.getBuy() + "\n Sell : " + m.getSell() + "\n";
-			}
-			String replyToken = messageEvent.getReplyToken();
-			balasChatDenganRandomJawaban(replyToken, message);
-		}else if(pesanSplit[0].equals("atenpunk")){
-			String jawaban = getRandomJawaban();
-			String replyToken = messageEvent.getReplyToken();
-			balasChatDenganRandomJawaban(replyToken, jawaban);
+		}catch (Exception e) {
+			System.out.println("ERROR : "+e.getMessage());
 		}
+
 	}
 
 	private String getRandomJawaban(){
@@ -165,8 +170,8 @@ public class Application extends SpringBootServletInitializer {
 					response.append(inputLine);
 				}
 				in.close();
-//				System.out.println(response.toString());
-//				System.out.println("listGraviex.size : "+listGraviex.size());
+				//				System.out.println(response.toString());
+				//				System.out.println("listGraviex.size : "+listGraviex.size());
 
 				JSONObject json = new JSONObject(response.toString());
 				for (CoinModel coinModel : listGraviex) {
