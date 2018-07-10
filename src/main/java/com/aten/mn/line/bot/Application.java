@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
@@ -42,9 +43,11 @@ public class Application extends SpringBootServletInitializer {
 
 	private static final String cryptoBridgeTickerApi = "https://api.crypto-bridge.org/api/v1/ticker";
 	private static final String graviexTickerApi = "https://graviex.net:443//api/v2/tickers.json";
+	private static DecimalFormat df0 = new DecimalFormat("#,##0");
 	private static DecimalFormat df = new DecimalFormat("#,##0.00");
 	private static DecimalFormat df9 = new DecimalFormat("#,##0.000000000");
 	private static DecimalFormat df8 = new DecimalFormat("#,##0.00000000");
+	private static List<CoinModel> changeNode;
 
 	@Override
 	protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
@@ -53,9 +56,68 @@ public class Application extends SpringBootServletInitializer {
 
 	public static void main(String[] args) {
 
+		// Fix Data
+		changeNode = new ArrayList<CoinModel>();
+		CoinModel vyi = new CoinModel();
+		vyi.setName("VYI");
+		int[] vyiBlock = new int[3];
+		int[] vyiCollateral = new int[3];
+		vyiBlock[0] = 150000;
+		vyiCollateral[0] = 6000;
+		vyiBlock[1] = 200000;
+		vyiCollateral[1] = 8000;
+		vyiBlock[2] = 300000;
+		vyiCollateral[2] = 12000;
+		vyi.setChangeBlock(vyiBlock);;
+		vyi.setChangeCollateral(vyiCollateral);
+		changeNode.add(vyi);
+
+		CoinModel htrc = new CoinModel();
+		htrc.setName("HTRC");
+		int[] htrcBlock = new int[3];
+		int[] htrcCollateral = new int[3];
+		htrcBlock[0] = 320000;
+		htrcCollateral[0] = 100000;
+		htrcBlock[1] = 500000;
+		htrcCollateral[1] = 150000;
+		htrcBlock[2] = 750000;
+		htrcCollateral[2] = 200000;
+		htrc.setChangeBlock(htrcBlock);;
+		htrc.setChangeCollateral(htrcCollateral);
+		changeNode.add(htrc);
+
+		CoinModel goss = new CoinModel();
+		goss.setName("GOSS");
+		int[] gossBlock = new int[3];
+		int[] gossCollateral = new int[3];
+		gossBlock[0] = 100000;
+		gossCollateral[0] = 10000;
+		gossBlock[1] = 150000;
+		gossCollateral[1] = 20000;
+		gossBlock[2] = 200000;
+		gossCollateral[2] = 30000;
+		goss.setChangeBlock(gossBlock);;
+		goss.setChangeCollateral(gossCollateral);
+		changeNode.add(goss);
+
+
+		CoinModel cdm = new CoinModel();
+		cdm.setName("CDM");
+		int[] cdmBlock = new int[3];
+		int[] cdmCollateral = new int[3];
+		cdmBlock[0] = 75000;
+		cdmCollateral[0] = 50000;
+		cdmBlock[1] = 150000;
+		cdmCollateral[1] = 100000;
+		cdmBlock[2] = 300000;
+		cdmCollateral[2] = 250000;
+		cdm.setChangeBlock(cdmBlock);;
+		cdm.setChangeCollateral(cdmCollateral);
+		changeNode.add(cdm);
+
 		SpringApplication.run(Application.class, args);
-		
-//		masternodeOnline("DASH");
+
+		//		masternodeOnline("VYI");
 
 	}
 
@@ -169,7 +231,6 @@ public class Application extends SpringBootServletInitializer {
 						new InputStreamReader(connection.getInputStream()));
 				String inputLine;
 				StringBuffer response = new StringBuffer();
-
 				boolean chk = false;
 				while ((inputLine = in.readLine()) != null) {
 					if(inputLine.contains("Active masternodes")) {
@@ -178,9 +239,9 @@ public class Application extends SpringBootServletInitializer {
 					}else if(inputLine.contains("Coins locked")) {
 						chk = true;
 						response.append(inputLine);
-					}else if(inputLine.contains("Last "+coin+" block")) {
+					}else if(inputLine.contains("Last "+coin+" block")) { 						
 						response.append(inputLine.split("generated")[0]);
-					}else if(inputLine.contains("AVG block time")) {
+					}else if(inputLine.contains("AVG block time:")) {
 						chk = true;
 						response.append(inputLine);
 					}else {
@@ -197,8 +258,54 @@ public class Application extends SpringBootServletInitializer {
 				data = data.replaceAll("<td>", "");
 				data = data.replaceAll(":", " : ");
 				data = data.replaceAll(coin+" ", "");
+				try {
+					if(changeNode!=null && changeNode.size()>0) {
+						for(CoinModel model:changeNode) {
+							if(model.getName().equals(coin)) {
+								int lastBlock = 0;
+								int avgBlock = 0;
+								String[] dataArray = data.split("\n");
+								for(String a:dataArray) {
+									if(a.contains("Last block")) {
+										lastBlock = Integer.parseInt(a.split(" ")[2].replaceAll(",", ""));
+									}else if(a.contains("AVG block time")) {
+										String temp_01 = a.split(" : ")[1];
+										String[] temp_02 = temp_01.split(" ");
+										for(String time:temp_02) {
+											if(time.contains("m")) {
+												avgBlock += (Integer.parseInt(time.replaceAll("m", ""))*60);
+											}else if(time.contains("s")) {
+												avgBlock += Integer.parseInt(time.replaceAll("s", ""));
+											}
+										}
+									}
+								}
+								int changeCollateral = 0;
+								int changeBlock = 0;
+								for(int i=0;i<model.getChangeBlock().length;i++) {
+									int block = model.getChangeBlock()[i];
+									int collateral = model.getChangeCollateral()[i];
+									if(block > lastBlock) {
+										changeCollateral = collateral;
+										changeBlock = block;
+										break;
+									}
+								}
+								int blockLeft = changeBlock-lastBlock;
+								int seconds = blockLeft*avgBlock;
+								int day = (int)TimeUnit.SECONDS.toDays(seconds);        
+								long hours = (TimeUnit.SECONDS.toHours(seconds) - (day*24));
+								long minute = (TimeUnit.SECONDS.toMinutes(seconds) - ((day*24*60)+(hours*60)));
+								data = data + "\nCollateral "+df0.format(changeCollateral)+" at block "+df0.format(changeBlock);
+								data = data + "\nTime left day "+day+" hour "+hours+" minute "+minute;
+								break;
+							}
+						}
+					}
+				}catch (Exception e) {
+					e.printStackTrace();
+				}
 				System.out.println(data);
-
 			} else {
 				throw new Exception("Error:(StatusCode)" + statusCode + ", " + connection.getResponseMessage());
 			}

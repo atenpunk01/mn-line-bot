@@ -14,6 +14,8 @@ public class CoinModel {
     private String buy;
     private String sell;
     private String change;
+    private int[] changeBlock;
+    private int[] changeCollateral;
 
     public String getName() {
         return name;
@@ -54,6 +56,22 @@ public class CoinModel {
     public void setChange(String change) {
         this.change = change;
     }
+
+	public int[] getChangeBlock() {
+		return changeBlock;
+	}
+
+	public void setChangeBlock(int[] changeBlock) {
+		this.changeBlock = changeBlock;
+	}
+
+	public int[] getChangeCollateral() {
+		return changeCollateral;
+	}
+
+	public void setChangeCollateral(int[] changeCollateral) {
+		this.changeCollateral = changeCollateral;
+	}
     
     
 }
