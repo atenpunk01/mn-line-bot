@@ -62,7 +62,7 @@ public class Application extends SpringBootServletInitializer {
 		String[] pesanSplit = pesan.split(" ");
 
 		if(pesanSplit[0].contains("/price")) {
-			String price = "/price goss";
+			String price = pesanSplit[0];
 			String coin = price.split(" ")[1];
 			System.out.println("coin : "+coin);
 			List<CoinModel> listGraviex = new ArrayList<CoinModel>();
