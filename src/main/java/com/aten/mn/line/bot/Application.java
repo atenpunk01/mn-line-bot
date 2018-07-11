@@ -117,7 +117,7 @@ public class Application extends SpringBootServletInitializer {
 
 		SpringApplication.run(Application.class, args);
 
-		//		masternodeOnline("VYI");
+//				masternodeOnline("VYI");
 
 	}
 
@@ -233,10 +233,13 @@ public class Application extends SpringBootServletInitializer {
 				StringBuffer response = new StringBuffer();
 				boolean chk = false;
 				while ((inputLine = in.readLine()) != null) {
-					if(inputLine.contains("Active masternodes")) {
+					if(inputLine.contains("ROI (annual):")) {
+						chk = true;
+						response.append("ROI : ");
+					}else if(inputLine.contains("Active masternodes:")) {
 						chk = true;
 						response.append(inputLine);
-					}else if(inputLine.contains("Coins locked")) {
+					}else if(inputLine.contains("Coins locked:")) {
 						chk = true;
 						response.append(inputLine);
 					}else if(inputLine.contains("Last "+coin+" block")) { 						
@@ -244,6 +247,9 @@ public class Application extends SpringBootServletInitializer {
 					}else if(inputLine.contains("AVG block time:")) {
 						chk = true;
 						response.append(inputLine);
+					}else if(inputLine.contains("Required coins for masternode:")) {
+						chk = true;
+						response.append("Required coins mn : ");
 					}else {
 						if(chk) {
 							chk = false;
