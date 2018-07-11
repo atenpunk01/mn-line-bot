@@ -117,7 +117,7 @@ public class Application extends SpringBootServletInitializer {
 
 		SpringApplication.run(Application.class, args);
 
-//				masternodeOnline("VYI");
+//		masternodeOnline("VYI");
 
 	}
 
@@ -232,8 +232,13 @@ public class Application extends SpringBootServletInitializer {
 				String inputLine;
 				StringBuffer response = new StringBuffer();
 				boolean chk = false;
+				boolean chkVolume = false;
+				int index = 0;
 				while ((inputLine = in.readLine()) != null) {
-					if(inputLine.contains("ROI (annual):")) {
+					if(inputLine.contains("<strong>Volume</strong>")) {
+						chkVolume = true;
+						response.append("Volume : ");
+					}else if(inputLine.contains("ROI (annual):")) {
 						chk = true;
 						response.append("ROI : ");
 					}else if(inputLine.contains("Active masternodes:")) {
@@ -254,6 +259,13 @@ public class Application extends SpringBootServletInitializer {
 						if(chk) {
 							chk = false;
 							response.append(inputLine+"\n");
+						}
+						if(chkVolume) {
+							index++;
+							if(index==6) {
+								chkVolume = false;
+								response.append(inputLine+"\n");
+							}
 						}
 					}					
 				}
