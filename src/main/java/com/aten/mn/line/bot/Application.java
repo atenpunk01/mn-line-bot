@@ -119,7 +119,7 @@ public class Application extends SpringBootServletInitializer {
 		changeNode.add(cdm);
 
 		SpringApplication.run(Application.class, args);
-
+		
 //		try {
 //			final String coin = "goss";
 //			Runnable r1 = new Runnable() {			
@@ -200,9 +200,8 @@ public class Application extends SpringBootServletInitializer {
 		try {
 			String pesan = messageEvent.getMessage().getText().toLowerCase();
 
-			if(pesan.contains("/p")) {
-				String[] pesanSplit = pesan.split(" ");
-				String coin = pesanSplit[1];
+			if(pesan.startsWith("/")) {
+				String coin = pesan.substring(1, pesan.length());
 				System.out.println("coin : "+coin);
 				String message = "";
 				try {
