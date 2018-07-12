@@ -255,6 +255,9 @@ public class Application extends SpringBootServletInitializer {
 					}else if(inputLine.contains("Required coins for masternode:")) {
 						chk = true;
 						response.append("Required coins mn : ");
+					}else if(inputLine.contains("Masternode worth:")) {
+						chk = true;
+						response.append(inputLine);
 					}else {
 						if(chk) {
 							chk = false;
