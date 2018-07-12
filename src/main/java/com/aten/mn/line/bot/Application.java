@@ -201,7 +201,7 @@ public class Application extends SpringBootServletInitializer {
 			String pesan = messageEvent.getMessage().getText().toLowerCase();
 
 			if(pesan.startsWith("/")) {
-				String coin = pesan.substring(1, pesan.length());
+				String coin = pesan.startsWith("/p ")?pesan.split(" ")[1]:pesan.substring(1, pesan.length());				
 				System.out.println("coin : "+coin);
 				String message = "";
 				try {
