@@ -48,6 +48,9 @@ public class Application extends SpringBootServletInitializer {
 	private static DecimalFormat df9 = new DecimalFormat("#,##0.000000000");
 	private static DecimalFormat df8 = new DecimalFormat("#,##0.00000000");
 	private static List<CoinModel> changeNode;
+	private static List<CoinModel> listGv = null;
+	private static List<CoinModel> listCb = null;
+	private static String messageMno = "";
 
 	@Override
 	protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
@@ -117,8 +120,79 @@ public class Application extends SpringBootServletInitializer {
 
 		SpringApplication.run(Application.class, args);
 
-//		masternodeOnline("VYI");
-
+//		try {
+//			final String coin = "goss";
+//			Runnable r1 = new Runnable() {			
+//				@Override
+//				public void run() {				
+//					List<CoinModel> listGraviex = new ArrayList<CoinModel>();
+//					CoinModel modelG = new CoinModel();
+//					modelG.setName(coin.toUpperCase());
+//					modelG.setKey(coin.toLowerCase()+"btc");
+//					listGraviex.add(modelG);
+//					priceGraviex(listGraviex);
+//					System.out.println("r1 exiting.");
+//				}
+//			};
+//			Runnable r2 = new Runnable() {			
+//				@Override
+//				public void run() {
+//					List<CoinModel> listCryptoBridge = new ArrayList<CoinModel>();
+//					CoinModel modelC = new CoinModel();
+//					modelC.setName(coin.toUpperCase());
+//					modelC.setKey(coin.toUpperCase()+"_BTC");
+//					listCryptoBridge.add(modelC);
+//					priceCryptoBridge(listCryptoBridge);
+//					System.out.println("r2 exiting.");
+//				}
+//			};
+//			Runnable r3 = new Runnable() {
+//				@Override
+//				public void run() {
+//					masternodeOnline(coin.toUpperCase());
+//					System.out.println("r3 exiting.");
+//				}
+//			};
+//			Thread t1 = new Thread(r1);
+//			t1.start();
+//			//			t1.join();
+//			Thread t2 = new Thread(r2);
+//			t2.start();
+//			//			t2.join();
+//			Thread t3 = new Thread(r3);
+//			t3.start();
+//			//			t3.join();
+//
+//			System.out.println("Thread One is alive: "
+//					+ t1.isAlive());
+//			System.out.println("Thread Two is alive: "
+//					+ t2.isAlive());
+//			System.out.println("Thread Three is alive: "
+//					+ t3.isAlive());
+//			try {
+//				System.out.println("Waiting for threads to finish.");
+//				t1.join();
+//				t2.join();
+//				t3.join();
+//			} catch (InterruptedException e) {
+//				System.out.println("Main thread Interrupted");
+//			}
+//
+//			System.out.println("Main thread exiting.");
+//
+//			String message = "";
+//			for (CoinModel m : listGv) {
+//				message += m.getName() + "\n Buy : " + m.getBuy() + "\n Sell : " + m.getSell() + "\n";
+//			}
+//			for (CoinModel m : listCb) {
+//				message += m.getName() + "\n Buy : " + m.getBuy() + "\n Sell : " + m.getSell() + "\n";
+//			}
+//			message += messageMno;
+//
+//			System.out.println(message);
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
 	}
 
 	@EventMapping
@@ -130,26 +204,74 @@ public class Application extends SpringBootServletInitializer {
 				String[] pesanSplit = pesan.split(" ");
 				String coin = pesanSplit[1];
 				System.out.println("coin : "+coin);
-				List<CoinModel> listGraviex = new ArrayList<CoinModel>();
-				List<CoinModel> listCryptoBridge = new ArrayList<CoinModel>();
-				CoinModel modelG = new CoinModel();
-				modelG.setName(coin.toUpperCase());
-				modelG.setKey(coin.toLowerCase()+"btc");
-				listGraviex.add(modelG);
-				CoinModel modelC = new CoinModel();
-				modelC.setName(coin.toUpperCase());
-				modelC.setKey(coin.toUpperCase()+"_BTC");
-				listCryptoBridge.add(modelC);
-				List<CoinModel> list1 = priceGraviex(listGraviex);
-				List<CoinModel> list2 = priceCryptoBridge(listCryptoBridge);
 				String message = "";
-				for (CoinModel m : list1) {
-					message += m.getName() + "\n Buy : " + m.getBuy() + "\n Sell : " + m.getSell() + "\n";
+				try {
+					Runnable r1 = new Runnable() {			
+						@Override
+						public void run() {				
+							List<CoinModel> listGraviex = new ArrayList<CoinModel>();
+							CoinModel modelG = new CoinModel();
+							modelG.setName(coin.toUpperCase());
+							modelG.setKey(coin.toLowerCase()+"btc");
+							listGraviex.add(modelG);
+							priceGraviex(listGraviex);
+							System.out.println("r1 exiting.");
+						}
+					};
+					Runnable r2 = new Runnable() {			
+						@Override
+						public void run() {
+							List<CoinModel> listCryptoBridge = new ArrayList<CoinModel>();
+							CoinModel modelC = new CoinModel();
+							modelC.setName(coin.toUpperCase());
+							modelC.setKey(coin.toUpperCase()+"_BTC");
+							listCryptoBridge.add(modelC);
+							priceCryptoBridge(listCryptoBridge);
+							System.out.println("r2 exiting.");
+						}
+					};
+					Runnable r3 = new Runnable() {
+						@Override
+						public void run() {
+							masternodeOnline(coin.toUpperCase());
+							System.out.println("r3 exiting.");
+						}
+					};
+					Thread t1 = new Thread(r1);
+					t1.start();
+					Thread t2 = new Thread(r2);
+					t2.start();
+					Thread t3 = new Thread(r3);
+					t3.start();
+					System.out.println("Thread One is alive: "
+							+ t1.isAlive());
+					System.out.println("Thread Two is alive: "
+							+ t2.isAlive());
+					System.out.println("Thread Three is alive: "
+							+ t3.isAlive());
+					try {
+						System.out.println("Waiting for threads to finish.");
+						t1.join();
+						t2.join();
+						t3.join();
+					} catch (InterruptedException e) {
+						System.out.println("Main thread Interrupted");
+					}
+					System.out.println("Main thread exiting.");
+
+					for (CoinModel m : listGv) {
+						message += m.getName() + "\n Buy : " + m.getBuy() + "\n Sell : " + m.getSell() + "\n";
+					}
+					for (CoinModel m : listCb) {
+						message += m.getName() + "\n Buy : " + m.getBuy() + "\n Sell : " + m.getSell() + "\n";
+					}
+					message += messageMno;
+
+					System.out.println(message);
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
-				for (CoinModel m : list2) {
-					message += m.getName() + "\n Buy : " + m.getBuy() + "\n Sell : " + m.getSell() + "\n";
-				}
-				message += masternodeOnline(coin.toUpperCase());
+				
 				String replyToken = messageEvent.getReplyToken();
 				balasChatDenganRandomJawaban(replyToken, message);
 			}else if(pesan.equals("atenpunk")){
@@ -186,7 +308,7 @@ public class Application extends SpringBootServletInitializer {
 	}
 
 	public static String masternodeOnline(String coin) {
-		String data = "";
+		messageMno = "";
 		try {
 
 			TrustManager[] trustAllCerts = new TrustManager[]{new X509TrustManager() {
@@ -274,18 +396,18 @@ public class Application extends SpringBootServletInitializer {
 				}
 				in.close();
 
-				data = response.toString().trim().replaceAll("	", "");
-				data = data.replaceAll("</td>", "");
-				data = data.replaceAll("<td>", "");
-				data = data.replaceAll(":", " : ");
-				data = data.replaceAll(coin+" ", "");
+				messageMno = response.toString().trim().replaceAll("	", "");
+				messageMno = messageMno.replaceAll("</td>", "");
+				messageMno = messageMno.replaceAll("<td>", "");
+				messageMno = messageMno.replaceAll(":", " : ");
+				messageMno = messageMno.replaceAll(coin+" ", "");
 				try {
 					if(changeNode!=null && changeNode.size()>0) {
 						for(CoinModel model:changeNode) {
 							if(model.getName().equals(coin)) {
 								int lastBlock = 0;
 								int avgBlock = 0;
-								String[] dataArray = data.split("\n");
+								String[] dataArray = messageMno.split("\n");
 								for(String a:dataArray) {
 									if(a.contains("Last block")) {
 										lastBlock = Integer.parseInt(a.split(" ")[2].replaceAll(",", ""));
@@ -317,8 +439,8 @@ public class Application extends SpringBootServletInitializer {
 								int day = (int)TimeUnit.SECONDS.toDays(seconds);        
 								long hours = (TimeUnit.SECONDS.toHours(seconds) - (day*24));
 								long minute = (TimeUnit.SECONDS.toMinutes(seconds) - ((day*24*60)+(hours*60)));
-								data = data + "\nCollateral "+df0.format(changeCollateral)+" at block "+df0.format(changeBlock);
-								data = data + "\nTime left "+day+" day "+hours+" hour "+minute+" minute";
+								messageMno = messageMno + "\nCollateral "+df0.format(changeCollateral)+" at block "+df0.format(changeBlock);
+								messageMno = messageMno + "\nTime left "+day+" day "+hours+" hour "+minute+" minute";
 								break;
 							}
 						}
@@ -326,7 +448,7 @@ public class Application extends SpringBootServletInitializer {
 				}catch (Exception e) {
 					e.printStackTrace();
 				}
-				System.out.println(data);
+				//				System.out.println(messageMno);
 			} else {
 				throw new Exception("Error:(StatusCode)" + statusCode + ", " + connection.getResponseMessage());
 			}
@@ -334,11 +456,11 @@ public class Application extends SpringBootServletInitializer {
 		}catch (Exception e) {
 			e.printStackTrace();
 		}
-		return data;
+		return messageMno;
 	}
 
 	public static List<CoinModel> priceGraviex(List<CoinModel> listGraviex) {
-		List<CoinModel> list = new ArrayList<CoinModel>();
+		listGv = new ArrayList<CoinModel>();
 		try {
 			TrustManager[] trustAllCerts = new TrustManager[]{new X509TrustManager() {
 				@Override
@@ -376,8 +498,8 @@ public class Application extends SpringBootServletInitializer {
 
 			int statusCode = connection.getResponseCode();
 			if (statusCode == 200) {
-				String responseMsg = connection.getResponseMessage();
-				System.out.println(responseMsg);
+				//				String responseMsg = connection.getResponseMessage();
+				//				System.out.println(responseMsg);
 				BufferedReader in = new BufferedReader(
 						new InputStreamReader(connection.getInputStream()));
 				String inputLine;
@@ -392,7 +514,7 @@ public class Application extends SpringBootServletInitializer {
 
 				JSONObject json = new JSONObject(response.toString());
 				for (CoinModel coinModel : listGraviex) {
-					System.out.println(coinModel.getKey());
+					//					System.out.println(coinModel.getKey());
 					JSONObject head = json.getJSONObject(coinModel.getKey());
 					if (head != null) {
 						JSONObject ticker = head.getJSONObject("ticker");
@@ -404,11 +526,11 @@ public class Application extends SpringBootServletInitializer {
 						buy = (buy.substring(0, buy.length() - 1) + "'" + buy.substring(buy.length() - 1, buy.length()));
 						sell = df9.format(Double.parseDouble(sell));
 						sell = (sell.substring(0, sell.length() - 1) + "'" + sell.substring(sell.length() - 1, sell.length()));
-						model.setName(coinModel.getName());
+						model.setName(coinModel.getName()+" (GV)");
 						model.setBuy(buy);
 						model.setSell(sell);
 						model.setChange(df.format(Double.parseDouble(change)));
-						list.add(model);
+						listGv.add(model);
 					}
 				}
 			} else {
@@ -418,11 +540,11 @@ public class Application extends SpringBootServletInitializer {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return list;
+		return listGv;
 	}
 
 	public static List<CoinModel> priceCryptoBridge(List<CoinModel> listCryptoBridge) {
-		List<CoinModel> list = new ArrayList<CoinModel>();
+		listCb = new ArrayList<CoinModel>();
 		try {
 			TrustManager[] trustAllCerts = new TrustManager[]{new X509TrustManager() {
 				@Override
@@ -451,8 +573,8 @@ public class Application extends SpringBootServletInitializer {
 
 			int statusCode = connection.getResponseCode();
 			if (statusCode == 200) {
-				String responseMsg = connection.getResponseMessage();
-				System.out.println(responseMsg);
+				//				String responseMsg = connection.getResponseMessage();
+				//				System.out.println(responseMsg);
 				BufferedReader in = new BufferedReader(
 						new InputStreamReader(connection.getInputStream()));
 				String inputLine;
@@ -476,11 +598,11 @@ public class Application extends SpringBootServletInitializer {
 								String bid = data.getString("bid");
 								String ask = data.getString("ask");
 								CoinModel model = new CoinModel();
-								model.setName(coinModel.getName());
+								model.setName(coinModel.getName()+" (CB)");
 								model.setBuy(df8.format(Double.parseDouble(bid)));
 								model.setSell(df8.format(Double.parseDouble(ask)));
 								model.setChange(df.format(Double.parseDouble("0")));
-								list.add(model);
+								listCb.add(model);
 								break;
 							}
 						}
@@ -493,7 +615,7 @@ public class Application extends SpringBootServletInitializer {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return list;
+		return listCb;
 	}
 }
 
