@@ -32,6 +32,7 @@ dependencies {
 	implementation 'com.linecorp.bot:line-bot-model:1.15.0'
 	implementation 'com.linecorp.bot:line-bot-api-client:1.15.0'
     compile("org.json:json:20141113")
+    compile 'com.google.code.gson:gson:2.7'
     
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 }

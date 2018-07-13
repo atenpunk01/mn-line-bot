@@ -25,6 +25,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 
+import com.google.gson.Gson;
 import com.linecorp.bot.client.LineMessagingClient;
 import com.linecorp.bot.model.ReplyMessage;
 import com.linecorp.bot.model.event.MessageEvent;
@@ -42,6 +43,7 @@ public class Application extends SpringBootServletInitializer {
 
 	private final String cryptoBridgeTickerApi = "https://api.crypto-bridge.org/api/v1/ticker";
 	private final String graviexTickerApi = "https://graviex.net:443//api/v2/tickers.json";
+	private final String cryptopiaTickerApi = "https://www.cryptopia.co.nz/api/GetMarket/";
 	private DecimalFormat df0 = new DecimalFormat("#,##0");
 	private DecimalFormat df = new DecimalFormat("#,##0.00");
 	private DecimalFormat df9 = new DecimalFormat("#,##0.000000000");
@@ -49,6 +51,7 @@ public class Application extends SpringBootServletInitializer {
 	private List<CoinModel> changeNode;
 	private List<CoinModel> listGv = null;
 	private List<CoinModel> listCb = null;
+	private List<CoinModel> listCp = null;
 	private String messageMno = "";
 
 	@Override
@@ -60,8 +63,13 @@ public class Application extends SpringBootServletInitializer {
 
 		SpringApplication.run(Application.class, args);
 
+
+		//		Application app = new Application();
 		//		try {
-		//			final String coin = "goss";
+		//			app.loadFixData();
+		//			final String coin = "cdm";
+		//			boolean chkCryptopia = coin.toUpperCase().equals("CDM");
+		//			String message = "";
 		//			Runnable r1 = new Runnable() {			
 		//				@Override
 		//				public void run() {				
@@ -70,7 +78,7 @@ public class Application extends SpringBootServletInitializer {
 		//					modelG.setName(coin.toUpperCase());
 		//					modelG.setKey(coin.toLowerCase()+"btc");
 		//					listGraviex.add(modelG);
-		//					priceGraviex(listGraviex);
+		//					app.priceGraviex(listGraviex);
 		//					System.out.println("r1 exiting.");
 		//				}
 		//			};
@@ -82,57 +90,74 @@ public class Application extends SpringBootServletInitializer {
 		//					modelC.setName(coin.toUpperCase());
 		//					modelC.setKey(coin.toUpperCase()+"_BTC");
 		//					listCryptoBridge.add(modelC);
-		//					priceCryptoBridge(listCryptoBridge);
+		//					app.priceCryptoBridge(listCryptoBridge);
 		//					System.out.println("r2 exiting.");
 		//				}
 		//			};
 		//			Runnable r3 = new Runnable() {
 		//				@Override
 		//				public void run() {
-		//					masternodeOnline(coin.toUpperCase());
+		//					app.masternodeOnline(coin.toUpperCase());
 		//					System.out.println("r3 exiting.");
 		//				}
 		//			};
+		//			Thread t4 = null;
+		//			if(chkCryptopia) {
+		//				Runnable r4 = new Runnable() {
+		//					@Override
+		//					public void run() {
+		//						CoinModel modelC = new CoinModel();
+		//						modelC.setName(coin.toUpperCase());
+		//						modelC.setKey(coin.toUpperCase()+"_BTC");
+		//						app.priceCryptopia(modelC);
+		//						System.out.println("r4 exiting.");
+		//					}
+		//				};
+		//				t4 = new Thread(r4);
+		//				t4.start();
+		//			}
+		//
 		//			Thread t1 = new Thread(r1);
 		//			t1.start();
-		//			//			t1.join();
 		//			Thread t2 = new Thread(r2);
 		//			t2.start();
-		//			//			t2.join();
 		//			Thread t3 = new Thread(r3);
 		//			t3.start();
-		//			//			t3.join();
-		//
-		//			System.out.println("Thread One is alive: "
-		//					+ t1.isAlive());
-		//			System.out.println("Thread Two is alive: "
-		//					+ t2.isAlive());
-		//			System.out.println("Thread Three is alive: "
-		//					+ t3.isAlive());
+		//			System.out.println("Thread One is alive: " + t1.isAlive());
+		//			System.out.println("Thread Two is alive: " + t2.isAlive());
+		//			System.out.println("Thread Three is alive: " + t3.isAlive());
+		//			if(chkCryptopia)
+		//				System.out.println("Thread Four is alive: " + t4.isAlive());
 		//			try {
 		//				System.out.println("Waiting for threads to finish.");
 		//				t1.join();
 		//				t2.join();
 		//				t3.join();
+		//				if(chkCryptopia)
+		//					t4.join();
 		//			} catch (InterruptedException e) {
 		//				System.out.println("Main thread Interrupted");
 		//			}
-		//
 		//			System.out.println("Main thread exiting.");
 		//
-		//			String message = "";
-		//			for (CoinModel m : listGv) {
+		//			for (CoinModel m : app.listGv) {
 		//				message += m.getName() + "\n Buy : " + m.getBuy() + "\n Sell : " + m.getSell() + "\n";
 		//			}
-		//			for (CoinModel m : listCb) {
+		//			for (CoinModel m : app.listCb) {
 		//				message += m.getName() + "\n Buy : " + m.getBuy() + "\n Sell : " + m.getSell() + "\n";
 		//			}
-		//			message += messageMno;
+		//			if(chkCryptopia) {
+		//				for (CoinModel m : app.listCp) {
+		//					message += m.getName() + "\n Buy : " + m.getBuy() + "\n Sell : " + m.getSell() + "\n";
+		//				}
+		//			}						
+		//			message += app.messageMno;
 		//
 		//			System.out.println(message);
 		//		} catch (Exception e) {
 		//			e.printStackTrace();
 		//		}
+
 	}
 
 	private void loadFixData() {
@@ -205,6 +230,7 @@ public class Application extends SpringBootServletInitializer {
 				System.out.println("coin : "+coin);
 				String message = "";
 				loadFixData();
+				boolean chkCryptopia = coin.toUpperCase().equals("CDM");
 				try {
 					Runnable r1 = new Runnable() {			
 						@Override
@@ -237,23 +263,40 @@ public class Application extends SpringBootServletInitializer {
 							System.out.println("r3 exiting.");
 						}
 					};
+					Thread t4 = null;
+					if(chkCryptopia) {
+						Runnable r4 = new Runnable() {
+							@Override
+							public void run() {
+								CoinModel modelCp = new CoinModel();
+								modelCp.setName(coin.toUpperCase());
+								modelCp.setKey(coin.toUpperCase()+"_BTC");
+								priceCryptopia(modelCp);
+								System.out.println("r4 exiting.");
+							}
+						};
+						t4 = new Thread(r4);
+						t4.start();
+					}
+
 					Thread t1 = new Thread(r1);
 					t1.start();
 					Thread t2 = new Thread(r2);
 					t2.start();
 					Thread t3 = new Thread(r3);
 					t3.start();
-					System.out.println("Thread One is alive: "
-							+ t1.isAlive());
-					System.out.println("Thread Two is alive: "
-							+ t2.isAlive());
-					System.out.println("Thread Three is alive: "
-							+ t3.isAlive());
+					System.out.println("Thread One is alive: " + t1.isAlive());
+					System.out.println("Thread Two is alive: " + t2.isAlive());
+					System.out.println("Thread Three is alive: " + t3.isAlive());
+					if(chkCryptopia)
+						System.out.println("Thread Four is alive: " + t4.isAlive());
 					try {
 						System.out.println("Waiting for threads to finish.");
 						t1.join();
 						t2.join();
 						t3.join();
+						if(chkCryptopia)
+							t4.join();
 					} catch (InterruptedException e) {
 						System.out.println("Main thread Interrupted");
 					}
@@ -265,6 +308,11 @@ public class Application extends SpringBootServletInitializer {
 					for (CoinModel m : listCb) {
 						message += m.getName() + "\n Buy : " + m.getBuy() + "\n Sell : " + m.getSell() + "\n";
 					}
+					if(chkCryptopia) {
+						for (CoinModel m : listCp) {
+							message += m.getName() + "\n Buy : " + m.getBuy() + "\n Sell : " + m.getSell() + "\n";
+						}
+					}						
 					message += messageMno;
 
 					System.out.println(message);
@@ -457,6 +505,71 @@ public class Application extends SpringBootServletInitializer {
 			e.printStackTrace();
 		}
 		return messageMno;
+	}
+
+	public List<CoinModel> priceCryptopia(CoinModel coinModel) {
+		listCp = new ArrayList<CoinModel>();
+		try {
+			TrustManager[] trustAllCerts = new TrustManager[]{new X509TrustManager() {
+				@Override
+				public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+					return null;
+				}
+
+				@Override
+				public void checkClientTrusted(X509Certificate[] certs,
+						String authType) {
+				}
+
+				@Override
+				public void checkServerTrusted(X509Certificate[] certs,
+						String authType) {
+				}
+			}};
+
+
+			SSLContext sc = SSLContext.getInstance("SSL");
+			sc.init(null, trustAllCerts, new java.security.SecureRandom());
+			HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+			URL url = new URL(cryptopiaTickerApi+coinModel.getKey());
+			HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
+			connection.setDoOutput(true);
+			connection.connect();
+
+			int statusCode = connection.getResponseCode();
+			if (statusCode == 200) {
+				//				String responseMsg = connection.getResponseMessage();
+				//				System.out.println(responseMsg);
+				BufferedReader in = new BufferedReader(
+						new InputStreamReader(connection.getInputStream()));
+				String inputLine;
+				StringBuffer response = new StringBuffer();
+
+				while ((inputLine = in.readLine()) != null) {
+					response.append(inputLine);
+				}
+				in.close();
+				System.out.println(response.toString());
+
+				Gson gson = new Gson();
+				CryptopiaTickerModel obj = gson.fromJson(response.toString(), CryptopiaTickerModel.class);
+				if(obj!=null) {
+					CoinModel model = new CoinModel();
+					String buy = df8.format(obj.getData().getBidPrice());
+					String sell = df8.format(obj.getData().getAskPrice());
+					model.setName(coinModel.getName()+" (CP)");
+					model.setBuy(buy);
+					model.setSell(sell);
+					listCp.add(model);
+				}
+			} else {
+				throw new Exception("Error:(StatusCode)" + statusCode + ", " + connection.getResponseMessage());
+			}
+			connection.disconnect();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return listCp;
 	}
 
 	public List<CoinModel> priceGraviex(List<CoinModel> listGraviex) {
