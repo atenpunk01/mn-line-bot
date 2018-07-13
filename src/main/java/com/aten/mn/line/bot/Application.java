@@ -40,17 +40,16 @@ public class Application extends SpringBootServletInitializer {
 	@Autowired
 	private LineMessagingClient lineMessagingClient;
 
-
-	private static final String cryptoBridgeTickerApi = "https://api.crypto-bridge.org/api/v1/ticker";
-	private static final String graviexTickerApi = "https://graviex.net:443//api/v2/tickers.json";
-	private static DecimalFormat df0 = new DecimalFormat("#,##0");
-	private static DecimalFormat df = new DecimalFormat("#,##0.00");
-	private static DecimalFormat df9 = new DecimalFormat("#,##0.000000000");
-	private static DecimalFormat df8 = new DecimalFormat("#,##0.00000000");
-	private static List<CoinModel> changeNode;
-	private static List<CoinModel> listGv = null;
-	private static List<CoinModel> listCb = null;
-	private static String messageMno = "";
+	private final String cryptoBridgeTickerApi = "https://api.crypto-bridge.org/api/v1/ticker";
+	private final String graviexTickerApi = "https://graviex.net:443//api/v2/tickers.json";
+	private DecimalFormat df0 = new DecimalFormat("#,##0");
+	private DecimalFormat df = new DecimalFormat("#,##0.00");
+	private DecimalFormat df9 = new DecimalFormat("#,##0.000000000");
+	private DecimalFormat df8 = new DecimalFormat("#,##0.00000000");
+	private List<CoinModel> changeNode;
+	private List<CoinModel> listGv = null;
+	private List<CoinModel> listCb = null;
+	private String messageMno = "";
 
 	@Override
 	protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
@@ -59,6 +58,84 @@ public class Application extends SpringBootServletInitializer {
 
 	public static void main(String[] args) {
 
+		SpringApplication.run(Application.class, args);
+
+		//		try {
+		//			final String coin = "goss";
+		//			Runnable r1 = new Runnable() {			
+		//				@Override
+		//				public void run() {				
+		//					List<CoinModel> listGraviex = new ArrayList<CoinModel>();
+		//					CoinModel modelG = new CoinModel();
+		//					modelG.setName(coin.toUpperCase());
+		//					modelG.setKey(coin.toLowerCase()+"btc");
+		//					listGraviex.add(modelG);
+		//					priceGraviex(listGraviex);
+		//					System.out.println("r1 exiting.");
+		//				}
+		//			};
+		//			Runnable r2 = new Runnable() {			
+		//				@Override
+		//				public void run() {
+		//					List<CoinModel> listCryptoBridge = new ArrayList<CoinModel>();
+		//					CoinModel modelC = new CoinModel();
+		//					modelC.setName(coin.toUpperCase());
+		//					modelC.setKey(coin.toUpperCase()+"_BTC");
+		//					listCryptoBridge.add(modelC);
+		//					priceCryptoBridge(listCryptoBridge);
+		//					System.out.println("r2 exiting.");
+		//				}
+		//			};
+		//			Runnable r3 = new Runnable() {
+		//				@Override
+		//				public void run() {
+		//					masternodeOnline(coin.toUpperCase());
+		//					System.out.println("r3 exiting.");
+		//				}
+		//			};
+		//			Thread t1 = new Thread(r1);
+		//			t1.start();
+		//			//			t1.join();
+		//			Thread t2 = new Thread(r2);
+		//			t2.start();
+		//			//			t2.join();
+		//			Thread t3 = new Thread(r3);
+		//			t3.start();
+		//			//			t3.join();
+		//
+		//			System.out.println("Thread One is alive: "
+		//					+ t1.isAlive());
+		//			System.out.println("Thread Two is alive: "
+		//					+ t2.isAlive());
+		//			System.out.println("Thread Three is alive: "
+		//					+ t3.isAlive());
+		//			try {
+		//				System.out.println("Waiting for threads to finish.");
+		//				t1.join();
+		//				t2.join();
+		//				t3.join();
+		//			} catch (InterruptedException e) {
+		//				System.out.println("Main thread Interrupted");
+		//			}
+		//
+		//			System.out.println("Main thread exiting.");
+		//
+		//			String message = "";
+		//			for (CoinModel m : listGv) {
+		//				message += m.getName() + "\n Buy : " + m.getBuy() + "\n Sell : " + m.getSell() + "\n";
+		//			}
+		//			for (CoinModel m : listCb) {
+		//				message += m.getName() + "\n Buy : " + m.getBuy() + "\n Sell : " + m.getSell() + "\n";
+		//			}
+		//			message += messageMno;
+		//
+		//			System.out.println(message);
+		//		} catch (Exception e) {
+		//			e.printStackTrace();
+		//		}
+	}
+
+	private void loadFixData() {
 		// Fix Data
 		changeNode = new ArrayList<CoinModel>();
 		CoinModel vyi = new CoinModel();
@@ -103,7 +180,6 @@ public class Application extends SpringBootServletInitializer {
 		goss.setChangeCollateral(gossCollateral);
 		changeNode.add(goss);
 
-
 		CoinModel cdm = new CoinModel();
 		cdm.setName("CDM");
 		int[] cdmBlock = new int[3];
@@ -117,82 +193,6 @@ public class Application extends SpringBootServletInitializer {
 		cdm.setChangeBlock(cdmBlock);;
 		cdm.setChangeCollateral(cdmCollateral);
 		changeNode.add(cdm);
-
-		SpringApplication.run(Application.class, args);
-		
-//		try {
-//			final String coin = "goss";
-//			Runnable r1 = new Runnable() {			
-//				@Override
-//				public void run() {				
-//					List<CoinModel> listGraviex = new ArrayList<CoinModel>();
-//					CoinModel modelG = new CoinModel();
-//					modelG.setName(coin.toUpperCase());
-//					modelG.setKey(coin.toLowerCase()+"btc");
-//					listGraviex.add(modelG);
-//					priceGraviex(listGraviex);
-//					System.out.println("r1 exiting.");
-//				}
-//			};
-//			Runnable r2 = new Runnable() {			
-//				@Override
-//				public void run() {
-//					List<CoinModel> listCryptoBridge = new ArrayList<CoinModel>();
-//					CoinModel modelC = new CoinModel();
-//					modelC.setName(coin.toUpperCase());
-//					modelC.setKey(coin.toUpperCase()+"_BTC");
-//					listCryptoBridge.add(modelC);
-//					priceCryptoBridge(listCryptoBridge);
-//					System.out.println("r2 exiting.");
-//				}
-//			};
-//			Runnable r3 = new Runnable() {
-//				@Override
-//				public void run() {
-//					masternodeOnline(coin.toUpperCase());
-//					System.out.println("r3 exiting.");
-//				}
-//			};
-//			Thread t1 = new Thread(r1);
-//			t1.start();
-//			//			t1.join();
-//			Thread t2 = new Thread(r2);
-//			t2.start();
-//			//			t2.join();
-//			Thread t3 = new Thread(r3);
-//			t3.start();
-//			//			t3.join();
-//
-//			System.out.println("Thread One is alive: "
-//					+ t1.isAlive());
-//			System.out.println("Thread Two is alive: "
-//					+ t2.isAlive());
-//			System.out.println("Thread Three is alive: "
-//					+ t3.isAlive());
-//			try {
-//				System.out.println("Waiting for threads to finish.");
-//				t1.join();
-//				t2.join();
-//				t3.join();
-//			} catch (InterruptedException e) {
-//				System.out.println("Main thread Interrupted");
-//			}
-//
-//			System.out.println("Main thread exiting.");
-//
-//			String message = "";
-//			for (CoinModel m : listGv) {
-//				message += m.getName() + "\n Buy : " + m.getBuy() + "\n Sell : " + m.getSell() + "\n";
-//			}
-//			for (CoinModel m : listCb) {
-//				message += m.getName() + "\n Buy : " + m.getBuy() + "\n Sell : " + m.getSell() + "\n";
-//			}
-//			message += messageMno;
-//
-//			System.out.println(message);
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
 	}
 
 	@EventMapping
@@ -204,6 +204,7 @@ public class Application extends SpringBootServletInitializer {
 				String coin = pesan.startsWith("/p ")?pesan.split(" ")[1]:pesan.substring(1, pesan.length());				
 				System.out.println("coin : "+coin);
 				String message = "";
+				loadFixData();
 				try {
 					Runnable r1 = new Runnable() {			
 						@Override
@@ -270,7 +271,7 @@ public class Application extends SpringBootServletInitializer {
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
-				
+
 				String replyToken = messageEvent.getReplyToken();
 				balasChatDenganRandomJawaban(replyToken, message);
 			}else if(pesan.equals("atenpunk")){
@@ -306,7 +307,7 @@ public class Application extends SpringBootServletInitializer {
 		}
 	}
 
-	public static String masternodeOnline(String coin) {
+	public String masternodeOnline(String coin) {
 		messageMno = "";
 		try {
 
@@ -458,7 +459,7 @@ public class Application extends SpringBootServletInitializer {
 		return messageMno;
 	}
 
-	public static List<CoinModel> priceGraviex(List<CoinModel> listGraviex) {
+	public List<CoinModel> priceGraviex(List<CoinModel> listGraviex) {
 		listGv = new ArrayList<CoinModel>();
 		try {
 			TrustManager[] trustAllCerts = new TrustManager[]{new X509TrustManager() {
@@ -542,7 +543,7 @@ public class Application extends SpringBootServletInitializer {
 		return listGv;
 	}
 
-	public static List<CoinModel> priceCryptoBridge(List<CoinModel> listCryptoBridge) {
+	public List<CoinModel> priceCryptoBridge(List<CoinModel> listCryptoBridge) {
 		listCb = new ArrayList<CoinModel>();
 		try {
 			TrustManager[] trustAllCerts = new TrustManager[]{new X509TrustManager() {
