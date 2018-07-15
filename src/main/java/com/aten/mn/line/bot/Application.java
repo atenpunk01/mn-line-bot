@@ -45,6 +45,8 @@ public class Application extends SpringBootServletInitializer {
 				String coin = pesan.startsWith("/p ")?pesan.split(" ")[1]:pesan.substring(1, pesan.length());				
 				System.out.println("coin : "+coin);
 				String message = new LineBot().genData(coin);
+				if(message==null || message.equals(""))
+					message = coin.toUpperCase()+" not found data";
 				String replyToken = messageEvent.getReplyToken();
 				balasChatDenganRandomJawaban(replyToken, message);
 			}else if(pesan.equals("atenpunk")){
