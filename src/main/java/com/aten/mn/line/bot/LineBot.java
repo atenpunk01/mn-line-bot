@@ -24,6 +24,7 @@ public class LineBot {
 	private final String cryptoBridgeTickerApi = "https://api.crypto-bridge.org/api/v1/ticker";
 	private final String graviexTickerApi = "https://graviex.net:443//api/v2/tickers.json";
 	private final String cryptopiaTickerApi = "https://www.cryptopia.co.nz/api/GetMarket/";
+	private final String bxTickerApi = "https://bx.in.th/api/";
 	private DecimalFormat df0 = new DecimalFormat("#,##0");
 	private DecimalFormat df = new DecimalFormat("#,##0.00");
 	private DecimalFormat df9 = new DecimalFormat("#,##0.000000000");
@@ -32,11 +33,16 @@ public class LineBot {
 	private List<CoinModel> listGv = null;
 	private List<CoinModel> listCb = null;
 	private List<CoinModel> listCp = null;
+	private List<CoinModel> listBx = null;
 	private String messageMno = "";
 
 	public static void main(String[] args) {
 		LineBot bot = new LineBot();
-		bot.genData("CDM");
+		bot.genData("BTC");
+
+		//		CoinModel coinModel = new CoinModel();
+		//		coinModel.setName("BTC");
+		//		bot.priceBX(coinModel);
 	}
 
 	public String genData(String coin) {
@@ -44,7 +50,7 @@ public class LineBot {
 		loadFixData();
 		boolean chkCryptopia = coin.toUpperCase().equals("CDM");
 		try {
-			Runnable r1 = new Runnable() {			
+			Runnable r1 = new Runnable() {
 				@Override
 				public void run() {				
 					List<CoinModel> listGraviex = new ArrayList<CoinModel>();
@@ -90,13 +96,24 @@ public class LineBot {
 				t4 = new Thread(r4);
 				t4.start();
 			}
-
+			Runnable r5 = new Runnable() {
+				@Override
+				public void run() {
+					CoinModel modelBX = new CoinModel();
+					modelBX.setName(coin.toUpperCase());
+					modelBX.setKey(coin.toUpperCase());
+					priceBX(modelBX);
+					System.out.println("r5 exiting.");
+				}
+			};
 			Thread t1 = new Thread(r1);
 			t1.start();
 			Thread t2 = new Thread(r2);
 			t2.start();
 			Thread t3 = new Thread(r3);
 			t3.start();
+			Thread t5 = new Thread(r5);
+			t5.start();
 			System.out.println("Thread One is alive: " + t1.isAlive());
 			System.out.println("Thread Two is alive: " + t2.isAlive());
 			System.out.println("Thread Three is alive: " + t3.isAlive());
@@ -107,6 +124,7 @@ public class LineBot {
 				t1.join();
 				t2.join();
 				t3.join();
+				t5.join();
 				if(chkCryptopia)
 					t4.join();
 			} catch (InterruptedException e) {
@@ -124,7 +142,10 @@ public class LineBot {
 				for (CoinModel m : listCp) {
 					message += m.getName() + "\n Buy : " + m.getBuy() + "\n Sell : " + m.getSell() + "\n";
 				}
-			}						
+			}				
+			for (CoinModel m : listBx) {
+				message += m.getName() + "\n Buy : " + m.getBuy() + "\n Sell : " + m.getSell() + "\n";
+			}
 			message += messageMno;
 
 			System.out.println(message);
@@ -375,6 +396,7 @@ public class LineBot {
 			HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
 			URL url = new URL(cryptopiaTickerApi+coinModel.getKey());
 			HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
+			connection.setConnectTimeout(1000*5);
 			connection.setDoOutput(true);
 			connection.connect();
 
@@ -391,7 +413,7 @@ public class LineBot {
 					response.append(inputLine);
 				}
 				in.close();
-//				System.out.println(response.toString());
+				//				System.out.println(response.toString());
 
 				Gson gson = new Gson();
 				CryptopiaTickerModel obj = gson.fromJson(response.toString(), CryptopiaTickerModel.class);
@@ -440,7 +462,6 @@ public class LineBot {
 			URL url = new URL(graviexTickerApi);
 			HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
 			connection.setConnectTimeout(1000*5);
-			connection.setReadTimeout(1000*5);
 			connection.addRequestProperty("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
 			connection.addRequestProperty("Accept-Encoding", "gzip, deflate, br");
 			connection.addRequestProperty("Accept-Language", "th,en-US;q=0.7,en;q=0.3");
@@ -526,7 +547,6 @@ public class LineBot {
 			URL url = new URL(cryptoBridgeTickerApi);
 			HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
 			connection.setConnectTimeout(1000*5);
-			connection.setReadTimeout(1000*5);
 			connection.setDoOutput(true);
 			connection.connect();
 
@@ -577,4 +597,90 @@ public class LineBot {
 		return listCb;
 	}
 
+	public List<CoinModel> priceBX(CoinModel coinModel) {
+		listBx = new ArrayList<CoinModel>();
+		try {
+			//			TrustManager[] trustAllCerts = new TrustManager[]{new X509TrustManager() {
+			//				@Override
+			//				public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+			//					return null;
+			//				}
+			//
+			//				@Override
+			//				public void checkClientTrusted(X509Certificate[] certs,
+			//						String authType) {
+			//				}
+			//
+			//				@Override
+			//				public void checkServerTrusted(X509Certificate[] certs,
+			//						String authType) {
+			//				}
+			//			}};
+			//			SSLContext sc = SSLContext.getInstance("SSL");
+			//			sc.init(null, trustAllCerts, new java.security.SecureRandom());
+			//			HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+			URL url = new URL(bxTickerApi);
+			//			URL url = new URL("https://bx.in.th/api/pairing/");
+			HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
+			connection.setConnectTimeout(1000*5);
+			//			connection.addRequestProperty("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
+			connection.addRequestProperty("Accept-Encoding", "UTF-8");
+			//			connection.setRequestProperty("Content-Type", "text/javascript;charset=utf-8");
+			//			connection.addRequestProperty("Accept-Language", "th,en-US;q=0.7,en;q=0.3");
+			//			connection.addRequestProperty("Connection", "keep-alive");
+			//			connection.addRequestProperty("Cookie", "__cfduid=d43bb2d54a4db06b0cc58316974df11c61508775856; bxsound=0;");
+			//			connection.addRequestProperty("PHPSESSID", "csvvhiqg0vqup5kp4496k53dqn");
+			//			connection.addRequestProperty("Cache-Control", "max-age=0");
+			//			connection.addRequestProperty("Host", "bx.in.th");
+			//			connection.addRequestProperty("Upgrade-Insecure-Requests", "1");
+			connection.addRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:61.0) Gecko/20100101 Firefox/61.0");
+			connection.setDoOutput(true);
+			connection.setDoInput(true);
+			connection.connect();
+
+			int statusCode = connection.getResponseCode();
+			if (statusCode == 200) {
+				String responseMsg = connection.getResponseMessage();
+				System.out.println(responseMsg);
+				BufferedReader in = new BufferedReader(
+						new InputStreamReader(connection.getInputStream()));
+				String inputLine;
+				StringBuffer response = new StringBuffer();
+				while ((inputLine = in.readLine()) != null) {
+					response.append(inputLine);
+				}
+				in.close();
+
+				String jsonData = response.toString();
+				JSONObject json = new JSONObject(jsonData);
+				for(int id = 1; id < 100; id++) {
+					try {
+						JSONObject data = json.getJSONObject(id+"");
+//						String primary_currency = data.getString("primary_currency");
+						String secondary_currency = data.getString("secondary_currency");
+//						System.out.println(secondary_currency);
+						if (secondary_currency != null && secondary_currency.equals(coinModel.getName())) {
+							JSONObject orderbook = data.getJSONObject("orderbook");
+							JSONObject bids = orderbook.getJSONObject("bids");
+							JSONObject asks = orderbook.getJSONObject("asks");
+							CoinModel model = new CoinModel();
+							model.setName(coinModel.getName()+" (BX)");
+							model.setBuy(df8.format(bids.getDouble("highbid")));
+							model.setSell(df8.format(asks.getDouble("highbid")));
+							listBx.add(model);
+							break;
+						}
+					}catch (Exception e) {
+//						System.out.println("Error : "+e.getMessage());
+					}
+				}
+			} else {
+				throw new Exception("Error:(StatusCode)" + statusCode + ", " + connection.getResponseMessage());
+			}
+			connection.disconnect();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return listBx;
+	}
 }
