@@ -181,14 +181,24 @@ public class LineBot {
 
 		CoinModel goss = new CoinModel();
 		goss.setName("GOSS");
-		int[] gossBlock = new int[3];
-		int[] gossCollateral = new int[3];
+		int[] gossBlock = new int[8];
+		int[] gossCollateral = new int[8];
 		gossBlock[0] = 100000;
 		gossCollateral[0] = 10000;
-		gossBlock[1] = 150000;
+		gossBlock[1] = 125000;
 		gossCollateral[1] = 20000;
-		gossBlock[2] = 200000;
+		gossBlock[2] = 150000;
 		gossCollateral[2] = 30000;
+		gossBlock[3] = 200000;
+		gossCollateral[3] = 50000;
+		gossBlock[4] = 400000;
+		gossCollateral[4] = 75000;
+		gossBlock[5] = 500000;
+		gossCollateral[5] = 100000;
+		gossBlock[6] = 600000;
+		gossCollateral[6] = 150000;
+		gossBlock[7] = 700000;
+		gossCollateral[7] = 200000;
 		goss.setChangeBlock(gossBlock);;
 		goss.setChangeCollateral(gossCollateral);
 		changeNode.add(goss);
