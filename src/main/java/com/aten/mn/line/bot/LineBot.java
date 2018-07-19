@@ -38,7 +38,7 @@ public class LineBot {
 
 	public static void main(String[] args) {
 		LineBot bot = new LineBot();
-		bot.genData("BTC");
+		bot.genData("ETH");
 
 		//		CoinModel coinModel = new CoinModel();
 		//		coinModel.setName("BTC");
@@ -48,7 +48,6 @@ public class LineBot {
 	public String genData(String coin) {
 		String message = "";
 		loadFixData();
-		boolean chkCryptopia = coin.toUpperCase().equals("CDM");
 		try {
 			Runnable r1 = new Runnable() {
 				@Override
@@ -81,21 +80,16 @@ public class LineBot {
 					System.out.println("r3 exiting.");
 				}
 			};
-			Thread t4 = null;
-			if(chkCryptopia) {
-				Runnable r4 = new Runnable() {
-					@Override
-					public void run() {
-						CoinModel modelCp = new CoinModel();
-						modelCp.setName(coin.toUpperCase());
-						modelCp.setKey(coin.toUpperCase()+"_BTC");
-						priceCryptopia(modelCp);
-						System.out.println("r4 exiting.");
-					}
-				};
-				t4 = new Thread(r4);
-				t4.start();
-			}
+			Runnable r4 = new Runnable() {
+				@Override
+				public void run() {
+					CoinModel modelCp = new CoinModel();
+					modelCp.setName(coin.toUpperCase());
+					modelCp.setKey(coin.toUpperCase()+"_BTC");
+					priceCryptopia(modelCp);
+					System.out.println("r4 exiting.");
+				}
+			};
 			Runnable r5 = new Runnable() {
 				@Override
 				public void run() {
@@ -112,21 +106,22 @@ public class LineBot {
 			t2.start();
 			Thread t3 = new Thread(r3);
 			t3.start();
+			Thread t4 = new Thread(r4);
+			t4.start();
 			Thread t5 = new Thread(r5);
 			t5.start();
 			System.out.println("Thread One is alive: " + t1.isAlive());
 			System.out.println("Thread Two is alive: " + t2.isAlive());
 			System.out.println("Thread Three is alive: " + t3.isAlive());
-			if(chkCryptopia)
-				System.out.println("Thread Four is alive: " + t4.isAlive());
+			System.out.println("Thread Four is alive: " + t4.isAlive());	
+			System.out.println("Thread Five is alive: " + t5.isAlive());			
 			try {
 				System.out.println("Waiting for threads to finish.");
 				t1.join();
 				t2.join();
 				t3.join();
+				t4.join();
 				t5.join();
-				if(chkCryptopia)
-					t4.join();
 			} catch (InterruptedException e) {
 				System.out.println("Main thread Interrupted");
 			}
@@ -138,10 +133,8 @@ public class LineBot {
 			for (CoinModel m : listCb) {
 				message += m.getName() + "\n Buy : " + m.getBuy() + "\n Sell : " + m.getSell() + "\n";
 			}
-			if(chkCryptopia) {
-				for (CoinModel m : listCp) {
-					message += m.getName() + "\n Buy : " + m.getBuy() + "\n Sell : " + m.getSell() + "\n";
-				}
+			for (CoinModel m : listCp) {
+				message += m.getName() + "\n Buy : " + m.getBuy() + "\n Sell : " + m.getSell() + "\n";
 			}				
 			for (CoinModel m : listBx) {
 				message += m.getName() + "\n Buy : " + m.getBuy() + "\n Sell : " + m.getSell() + "\n";
@@ -365,7 +358,7 @@ public class LineBot {
 			}
 			connection.disconnect();
 		}catch (Exception e) {
-			e.printStackTrace();
+			System.out.println(e.getMessage());
 		}
 		return messageMno;
 	}
@@ -431,7 +424,7 @@ public class LineBot {
 			}
 			connection.disconnect();
 		} catch (Exception e) {
-			e.printStackTrace();
+			System.out.println(e.getMessage());
 		}
 		return listCp;
 	}
@@ -516,7 +509,7 @@ public class LineBot {
 			}
 			connection.disconnect();
 		} catch (Exception e) {
-			e.printStackTrace();
+			System.out.println(e.getMessage());
 		}
 		return listGv;
 	}
@@ -592,7 +585,7 @@ public class LineBot {
 			}
 			connection.disconnect();
 		} catch (Exception e) {
-			e.printStackTrace();
+			System.out.println(e.getMessage());
 		}
 		return listCb;
 	}
@@ -656,9 +649,9 @@ public class LineBot {
 				for(int id = 1; id < 100; id++) {
 					try {
 						JSONObject data = json.getJSONObject(id+"");
-//						String primary_currency = data.getString("primary_currency");
+						//						String primary_currency = data.getString("primary_currency");
 						String secondary_currency = data.getString("secondary_currency");
-//						System.out.println(secondary_currency);
+						//						System.out.println(secondary_currency);
 						if (secondary_currency != null && secondary_currency.equals(coinModel.getName())) {
 							JSONObject orderbook = data.getJSONObject("orderbook");
 							JSONObject bids = orderbook.getJSONObject("bids");
@@ -671,7 +664,7 @@ public class LineBot {
 							break;
 						}
 					}catch (Exception e) {
-//						System.out.println("Error : "+e.getMessage());
+						//						System.out.println("Error : "+e.getMessage());
 					}
 				}
 			} else {
@@ -679,7 +672,7 @@ public class LineBot {
 			}
 			connection.disconnect();
 		} catch (Exception e) {
-			e.printStackTrace();
+			System.out.println(e.getMessage());
 		}
 		return listBx;
 	}
