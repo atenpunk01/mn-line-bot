@@ -16,6 +16,7 @@ public class CoinModel {
     private String change;
     private int[] changeBlock;
     private int[] changeCollateral;
+    private long maxsupply;
 
     public String getName() {
         return name;
@@ -71,6 +72,14 @@ public class CoinModel {
 
 	public void setChangeCollateral(int[] changeCollateral) {
 		this.changeCollateral = changeCollateral;
+	}
+
+	public long getMaxsupply() {
+		return maxsupply;
+	}
+
+	public void setMaxsupply(long maxsupply) {
+		this.maxsupply = maxsupply;
 	}
     
     

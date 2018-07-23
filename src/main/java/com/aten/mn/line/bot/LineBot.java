@@ -188,6 +188,7 @@ public class LineBot {
 		vyiCollateral[14] = 100000;
 		vyi.setChangeBlock(vyiBlock);;
 		vyi.setChangeCollateral(vyiCollateral);
+		vyi.setMaxsupply(vyiMaxsupply);
 		changeNode.add(vyi);
 
 		CoinModel htrc = new CoinModel();
@@ -209,6 +210,7 @@ public class LineBot {
 		htrcCollateral[5] = 250000;
 		htrc.setChangeBlock(htrcBlock);;
 		htrc.setChangeCollateral(htrcCollateral);
+		htrc.setMaxsupply(htrcMaxsupply);
 		changeNode.add(htrc);
 
 		CoinModel goss = new CoinModel();
@@ -234,6 +236,7 @@ public class LineBot {
 		gossCollateral[7] = 200000;
 		goss.setChangeBlock(gossBlock);;
 		goss.setChangeCollateral(gossCollateral);
+		goss.setMaxsupply(gossMaxsupply);
 		changeNode.add(goss);
 
 		CoinModel cdm = new CoinModel();
@@ -259,6 +262,7 @@ public class LineBot {
 		cdmCollateral[7] = 1000000;		
 		cdm.setChangeBlock(cdmBlock);;
 		cdm.setChangeCollateral(cdmCollateral);
+		cdm.setMaxsupply(cdmMaxsupply);
 		changeNode.add(cdm);
 	}
 
@@ -399,6 +403,8 @@ public class LineBot {
 								long minute = (TimeUnit.SECONDS.toMinutes(seconds) - ((day*24*60)+(hours*60)));
 								messageMno = messageMno + "\nCollateral "+df0.format(changeCollateral)+" at block "+df0.format(changeBlock);
 								messageMno = messageMno + "\nTime left "+day+" day "+hours+" hour "+minute+" minute";
+								if(model.getMaxsupply()>0)
+									messageMno = messageMno + "\nMaxsupply "+df0.format(model.getMaxsupply());
 								break;
 							}
 						}
