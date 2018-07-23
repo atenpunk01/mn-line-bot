@@ -331,7 +331,7 @@ public class LineBot {
 					}else if(inputLine.contains("Active masternodes:")) {
 						chk = true;
 						response.append(inputLine);
-					}else if(inputLine.contains("Supply : ")) {
+					}else if(inputLine.contains("Supply:")) {
 						chk = true;
 						response.append(inputLine);
 					}else if(inputLine.contains("Coins locked:")) {
@@ -345,7 +345,7 @@ public class LineBot {
 					}else if(inputLine.contains("Required coins for masternode:")) {
 						chk = true;
 						response.append("Required coins mn : ");
-					}else if(inputLine.contains("Masternode worth:")) {
+					}else if(inputLine.contains("MW:")) {
 						chk = true;
 						response.append(inputLine);
 					}else {
