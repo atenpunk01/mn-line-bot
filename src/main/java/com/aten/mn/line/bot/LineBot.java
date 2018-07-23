@@ -153,6 +153,7 @@ public class LineBot {
 		changeNode = new ArrayList<CoinModel>();
 		CoinModel vyi = new CoinModel();
 		vyi.setName("VYI");
+		long vyiMaxsupply = 210000000L;
 		int[] vyiBlock = new int[15];
 		int[] vyiCollateral = new int[15];
 		vyiBlock[0] = 150000;
@@ -191,6 +192,7 @@ public class LineBot {
 
 		CoinModel htrc = new CoinModel();
 		htrc.setName("HTRC");
+		long htrcMaxsupply = 210000000L;
 		int[] htrcBlock = new int[6];
 		int[] htrcCollateral = new int[6];
 		htrcBlock[0] = 320000;
@@ -211,6 +213,7 @@ public class LineBot {
 
 		CoinModel goss = new CoinModel();
 		goss.setName("GOSS");
+		long gossMaxsupply = 50000000L;
 		int[] gossBlock = new int[8];
 		int[] gossCollateral = new int[8];
 		gossBlock[0] = 100000;
@@ -235,7 +238,7 @@ public class LineBot {
 
 		CoinModel cdm = new CoinModel();
 		cdm.setName("CDM");
-		long cdmMaxsupply = 3500000000;
+		long cdmMaxsupply = 3500000000L;
 		int[] cdmBlock = new int[8];
 		int[] cdmCollateral = new int[8];
 		cdmBlock[0] = 75000;
