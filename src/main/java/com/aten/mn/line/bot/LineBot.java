@@ -324,10 +324,10 @@ public class LineBot {
 						response.append("Volume : ");
 					}else if(inputLine.contains("ROI (annual):")) {
 						chk = true;
-						response.append("ROI : ");
+						response.append("ROI: ");
 					}else if(inputLine.contains("AVG masternode reward frequency:")) {
 						chk = true;
-						response.append("AVG Reward : ");
+						response.append("AVG Reward: ");
 					}else if(inputLine.contains("Active masternodes:")) {
 						chk = true;
 						response.append(inputLine);
@@ -344,10 +344,10 @@ public class LineBot {
 						response.append(inputLine);
 					}else if(inputLine.contains("Required coins for masternode:")) {
 						chk = true;
-						response.append("Required coins mn : ");
-					}else if(inputLine.contains("MW:")) {
+						response.append("Required coins mn: ");
+					}else if(inputLine.contains("Masternode worth:")) {
 						chk = true;
-						response.append(inputLine);
+						response.append("MW:");
 					}else {
 						if(chk) {
 							chk = false;
