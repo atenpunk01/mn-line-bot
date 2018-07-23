@@ -325,7 +325,13 @@ public class LineBot {
 					}else if(inputLine.contains("ROI (annual):")) {
 						chk = true;
 						response.append("ROI : ");
+					}else if(inputLine.contains("AVG masternode reward frequency:")) {
+						chk = true;
+						response.append("AVG Reward : ");
 					}else if(inputLine.contains("Active masternodes:")) {
+						chk = true;
+						response.append(inputLine);
+					}else if(inputLine.contains("Supply : ")) {
 						chk = true;
 						response.append(inputLine);
 					}else if(inputLine.contains("Coins locked:")) {
