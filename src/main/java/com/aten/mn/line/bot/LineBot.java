@@ -235,7 +235,7 @@ public class LineBot {
 
 		CoinModel cdm = new CoinModel();
 		cdm.setName("CDM");
-		int cdmMaxsupply = 3500000000;
+		long cdmMaxsupply = 3500000000;
 		int[] cdmBlock = new int[8];
 		int[] cdmCollateral = new int[8];
 		cdmBlock[0] = 75000;
