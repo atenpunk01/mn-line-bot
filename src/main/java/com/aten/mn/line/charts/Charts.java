@@ -6,7 +6,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 
 import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
 
 import com.jensoft.sw2d.core.palette.ColorPalette;
 import com.jensoft.sw2d.core.palette.InputFonts;
@@ -36,8 +35,6 @@ import com.jensoft.sw2d.core.plugin.stripe.painter.StripePalette;
 import com.jensoft.sw2d.core.plugin.symbol.BarSymbol;
 import com.jensoft.sw2d.core.plugin.symbol.BarSymbolGroup;
 import com.jensoft.sw2d.core.plugin.symbol.BarSymbolLayer;
-import com.jensoft.sw2d.core.plugin.symbol.PointSymbol;
-import com.jensoft.sw2d.core.plugin.symbol.PointSymbolLayer;
 import com.jensoft.sw2d.core.plugin.symbol.SymbolComponent;
 import com.jensoft.sw2d.core.plugin.symbol.SymbolPlugin;
 import com.jensoft.sw2d.core.plugin.symbol.SymbolToolkit;
@@ -45,7 +42,6 @@ import com.jensoft.sw2d.core.plugin.symbol.painter.axis.BarDefaultAxisLabel;
 import com.jensoft.sw2d.core.plugin.symbol.painter.draw.BarDefaultDraw;
 import com.jensoft.sw2d.core.plugin.symbol.painter.effect.BarEffect4;
 import com.jensoft.sw2d.core.plugin.symbol.painter.fill.BarFill1;
-import com.jensoft.sw2d.core.plugin.symbol.painter.point.PointSymbolImage;
 import com.jensoft.sw2d.core.view.View2D;
 import com.jensoft.sw2d.core.window.WindowPart;
 
