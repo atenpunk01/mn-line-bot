@@ -82,8 +82,9 @@ public class Application extends SpringBootServletInitializer {
 		messages.add(jawabanDalamBentukTextMessage);
 		if(coin!=null && !coin.trim().equals("")) {
 			String fileName = System.getProperty("user.dir") + "/img" + File.separator + coin+".png";
+			System.out.println(fileName);
 			File file = new File(fileName);
-			if(file.exists()) {
+			if(!file.exists()) {
 				ImageMessage imageMessage = new ImageMessage(fileName, fileName);
 				messages.add(imageMessage);
 			}
