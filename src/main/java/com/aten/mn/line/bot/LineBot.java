@@ -491,13 +491,6 @@ public class LineBot {
 					int j=0;
 					double maxPrice = 0;
 					for(int i=begin;i<dateArray.length;i++) {
-//						Node model = new Node();
-//						model.setCoinName(coin);
-//						model.setDateTime(sdf.parse(dateArray[i]));
-//						model.setNode(Integer.parseInt(nodeArray[i]));
-//						model.setPrice(new BigDecimal(priceArray[i]));
-//						model.setRoi(Double.parseDouble(roiArray[i]));
-//						nodeList.add(model);
 //						lable[j] = dateArray[i].split("-")[0]+"-"+dateArray[i].split("-")[1];
 						lable[j] = dateArray[i].split("-")[1];
 						value[j] = new BigDecimal(priceArray[i].split("\\.")[1]).doubleValue();
@@ -512,9 +505,9 @@ public class LineBot {
 					for(int i=0;i<lable.length;i++) {
 						System.out.println(i+" : "+lable[i]+", "+value[i]);
 					}
-					Charts charts = new Charts();
-					maxPrice = maxPrice-(maxPrice % 10);
-					charts.genImage(coin,lable,value,node2,coinsLocked,(maxPrice+(maxPrice/8)),(maxPrice+(maxPrice/8)));
+//					Charts charts = new Charts();
+//					maxPrice = maxPrice-(maxPrice % 10);
+//					charts.genImage(coin,lable,value,node2,coinsLocked,(maxPrice+(maxPrice/8)),(maxPrice+(maxPrice/8)));
 				}catch (Exception e) {
 					e.printStackTrace();
 				}

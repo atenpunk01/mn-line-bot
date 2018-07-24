@@ -80,15 +80,15 @@ public class Application extends SpringBootServletInitializer {
 		List<Message> messages = new ArrayList<Message>();
 		TextMessage jawabanDalamBentukTextMessage = new TextMessage(jawaban);
 		messages.add(jawabanDalamBentukTextMessage);
-		if(coin!=null && !coin.trim().equals("")) {
-			String fileName = System.getProperty("user.dir") + "/src/main/resources/static/WEB-INF/img" + File.separator + coin+".png";
-			System.out.println(fileName);
-			File file = new File(fileName);
-			if(!file.exists()) {
-				ImageMessage imageMessage = new ImageMessage("https://mn-line-bot.herokuapp.com/img"+coin, "https://mn-line-bot.herokuapp.com/img"+coin);
-				messages.add(imageMessage);
-			}
-		}
+//		if(coin!=null && !coin.trim().equals("")) {
+//			String fileName = System.getProperty("user.dir") + "/src/main/resources/static/WEB-INF/img" + File.separator + coin+".png";
+//			System.out.println(fileName);
+//			File file = new File(fileName);
+//			if(!file.exists()) {
+//				ImageMessage imageMessage = new ImageMessage("https://mn-line-bot.herokuapp.com/img"+coin, "https://mn-line-bot.herokuapp.com/img"+coin);
+//				messages.add(imageMessage);
+//			}
+//		}
 		try {
 			lineMessagingClient
 			.replyMessage(new ReplyMessage(replyToken, messages))
