@@ -273,7 +273,8 @@ public class Charts {
 			pieslice.addSliceLabel(pieborderlabel);
 			view.repaintDevice();
 			view.repaint();
-			String fileName = System.getProperty("user.dir") + "/img" + File.separator + coin+".png";
+			String fileName = System.getProperty("user.dir") + "/src/main/resources/static/WEB-INF/img" + File.separator + coin+".png";
+			System.out.println(fileName);
 			try {
 				view.setSize(1000, 650);
 				int w = (int) view.getBounds().getWidth();
