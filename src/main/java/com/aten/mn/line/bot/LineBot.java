@@ -2,6 +2,7 @@ package com.aten.mn.line.bot;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.math.BigDecimal;
 import java.net.URL;
 import java.security.cert.X509Certificate;
 import java.text.DecimalFormat;
@@ -17,6 +18,7 @@ import javax.net.ssl.X509TrustManager;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import com.aten.mn.line.charts.Charts;
 import com.google.gson.Gson;
 
 public class LineBot {	
@@ -38,7 +40,7 @@ public class LineBot {
 
 	public static void main(String[] args) {
 		LineBot bot = new LineBot();
-		bot.genData("ETH");
+		bot.genData("VYI");
 
 		//		CoinModel coinModel = new CoinModel();
 		//		coinModel.setName("BTC");
@@ -318,6 +320,10 @@ public class LineBot {
 				boolean chk = false;
 				boolean chkVolume = false;
 				int index = 0;
+				int numberChart = 45;
+				String[] responseChart = new String[numberChart];
+				boolean chkChart = false;
+				int indexChart = 0;				
 				while ((inputLine = in.readLine()) != null) {
 					if(inputLine.contains("<strong>Volume</strong>")) {
 						chkVolume = true;
@@ -360,7 +366,16 @@ public class LineBot {
 								response.append(inputLine+"\n");
 							}
 						}
-					}					
+					}	
+					
+					if(inputLine.contains("<canvas id=\"canvas\"")) {
+						chkChart = true;
+					}
+					if(chkChart) {
+						if(indexChart < numberChart) {
+							responseChart[indexChart++] = inputLine.trim().replaceAll("	", "");
+						}
+					}
 				}
 				in.close();
 
@@ -369,6 +384,7 @@ public class LineBot {
 				messageMno = messageMno.replaceAll("<td>", "");
 				messageMno = messageMno.replaceAll(":", " : ");
 				messageMno = messageMno.replaceAll(coin+" ", "");
+				double coinsLocked = 0;
 				try {
 					if(changeNode!=null && changeNode.size()>0) {
 						for(CoinModel model:changeNode) {
@@ -389,6 +405,16 @@ public class LineBot {
 												avgBlock += Integer.parseInt(time.replaceAll("s", ""));
 											}
 										}
+									}else if(a.contains("Coins locked")) {
+										String temp_01 = a.split(" : ")[1];
+										String temp_02 = temp_01.split(" ")[1];
+										String temp_03 = temp_02.replaceAll("\\(", "");
+										String temp_04 = temp_03.replaceAll("%\\)", "");
+										System.out.println("temp_01 : "+temp_01);
+										System.out.println("temp_02 : "+temp_02);
+										System.out.println("temp_03 : "+temp_03);
+										System.out.println("temp_04 : "+temp_04);
+										coinsLocked = Double.parseDouble(temp_04);
 									}
 								}
 								int changeCollateral = 0;
@@ -415,9 +441,85 @@ public class LineBot {
 							}
 						}
 					}
+					
+					
+					String date = "";
+					String node = "";
+					String roi = "";
+					String price = "";
+					index = 0;
+					for(String data:responseChart) {
+						//					System.out.println((index)+" : "+data);
+						index++;
+						if(index==8) {
+							date = (data.split(" ")[1])
+									.replaceAll("\\[", "")
+									.replaceAll("\\],", "")
+									.replaceAll("\"", "");
+						}
+						if(index==16) {
+							node = (data.split(" ")[1])
+									.replaceAll("\\[", "")
+									.replaceAll("\\],", "")
+									.replaceAll("\"", "");
+						}
+						if(index==24) {
+							roi = (data.split(" ")[1])
+									.replaceAll("\\[", "")
+									.replaceAll("\\],", "")
+									.replaceAll("\"", "");
+						}
+						if(index==37) {
+							price = (data.split(" ")[1])
+									.replaceAll("\\[", "")
+									.replaceAll("\\],", "")
+									.replaceAll("\"", "");
+						}					
+					}
+					System.out.println("date : "+date);
+					System.out.println("node : "+node);
+					System.out.println("roi : "+roi);
+					System.out.println("price : "+price);
+					String[] dateArray = date.split(",");
+					String[] nodeArray = node.split(",");
+					String[] roiArray = roi.split(",");
+					String[] priceArray = price.split(",");
+					String[] lable = new String[30];
+					double[] value = new double[30];
+					int[] node2 = new int[30];
+					int begin = dateArray.length>30?dateArray.length-30:0;
+					int j=0;
+					double maxPrice = 0;
+					for(int i=begin;i<dateArray.length;i++) {
+//						Node model = new Node();
+//						model.setCoinName(coin);
+//						model.setDateTime(sdf.parse(dateArray[i]));
+//						model.setNode(Integer.parseInt(nodeArray[i]));
+//						model.setPrice(new BigDecimal(priceArray[i]));
+//						model.setRoi(Double.parseDouble(roiArray[i]));
+//						nodeList.add(model);
+//						lable[j] = dateArray[i].split("-")[0]+"-"+dateArray[i].split("-")[1];
+						lable[j] = dateArray[i].split("-")[1];
+						value[j] = new BigDecimal(priceArray[i].split("\\.")[1]).doubleValue();
+						if(maxPrice==0) {
+							maxPrice = value[j];
+						}
+						if(maxPrice<value[j]) {
+							maxPrice = value[j];
+						}
+						j++;								
+					}
+					for(int i=0;i<lable.length;i++) {
+						System.out.println(i+" : "+lable[i]+", "+value[i]);
+					}
+					Charts charts = new Charts();
+					maxPrice = maxPrice-(maxPrice % 10);
+					charts.genImage(coin,lable,value,node2,coinsLocked,(maxPrice+(maxPrice/8)),(maxPrice+(maxPrice/8)));
 				}catch (Exception e) {
 					e.printStackTrace();
 				}
+				
+				
 				//				System.out.println(messageMno);
 			} else {
 				throw new Exception("Error:(StatusCode)" + statusCode + ", " + connection.getResponseMessage());

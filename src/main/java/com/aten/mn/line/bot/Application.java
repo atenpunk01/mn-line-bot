@@ -1,6 +1,9 @@
 package com.aten.mn.line.bot;
 
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 import java.util.concurrent.ExecutionException;
 
@@ -14,6 +17,8 @@ import com.linecorp.bot.client.LineMessagingClient;
 import com.linecorp.bot.model.ReplyMessage;
 import com.linecorp.bot.model.event.MessageEvent;
 import com.linecorp.bot.model.event.message.TextMessageContent;
+import com.linecorp.bot.model.message.ImageMessage;
+import com.linecorp.bot.model.message.Message;
 import com.linecorp.bot.model.message.TextMessage;
 import com.linecorp.bot.spring.boot.annotation.EventMapping;
 import com.linecorp.bot.spring.boot.annotation.LineMessageHandler;
@@ -48,11 +53,11 @@ public class Application extends SpringBootServletInitializer {
 				if(message==null || message.equals(""))
 					message = coin.toUpperCase()+" not found data";
 				String replyToken = messageEvent.getReplyToken();
-				balasChatDenganRandomJawaban(replyToken, message);
+				balasChatDenganRandomJawaban(replyToken, message,coin);
 			}else if(pesan.equals("atenpunk")){
 				String jawaban = getRandomJawaban();
 				String replyToken = messageEvent.getReplyToken();
-				balasChatDenganRandomJawaban(replyToken, jawaban);
+				balasChatDenganRandomJawaban(replyToken, jawaban,null);
 			}
 		}catch (Exception e) {
 			System.out.println("ERROR : "+e.getMessage());
@@ -71,11 +76,18 @@ public class Application extends SpringBootServletInitializer {
 		return jawaban;
 	}
 
-	private void balasChatDenganRandomJawaban(String replyToken, String jawaban){
+	private void balasChatDenganRandomJawaban(String replyToken, String jawaban, String coin){
+		List<Message> messages = new ArrayList<Message>();
 		TextMessage jawabanDalamBentukTextMessage = new TextMessage(jawaban);
+		messages.add(jawabanDalamBentukTextMessage);
+		if(coin!=null && !coin.trim().equals("")) {
+			String fileName = System.getProperty("user.dir") + "/img" + File.separator + coin+".png";
+			ImageMessage imageMessage = new ImageMessage(fileName, fileName);
+			messages.add(imageMessage);
+		}
 		try {
 			lineMessagingClient
-			.replyMessage(new ReplyMessage(replyToken, jawabanDalamBentukTextMessage))
+			.replyMessage(new ReplyMessage(replyToken, messages))
 			.get();
 		} catch (InterruptedException | ExecutionException e) {
 			System.out.println("Ada error chat");
