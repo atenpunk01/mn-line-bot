@@ -30,11 +30,9 @@ public class HomeController {
         return "";
     }
     
-    @RequestMapping(value = "/img/GOSS", method = RequestMethod.GET)
+    @RequestMapping(value = "/img", method = RequestMethod.GET)
     public void getImageGOSS(HttpServletResponse response) throws IOException {
-//        InputStream in = new ClassPathResource("static/WEB-INF/img/GOSS.png").getInputStream();
-//        response.setContentType(MediaType.IMAGE_PNG_VALUE);
-    	InputStream in = new ByteArrayInputStream(Data.goss);
+    	InputStream in = new ByteArrayInputStream(Data.data);
         IOUtils.copy(in, response.getOutputStream());
     }
     

@@ -287,13 +287,8 @@ public class Charts {
 					//					out.close();
 					ByteArrayOutputStream baos = new ByteArrayOutputStream();
 					ImageIO.write(image, "png", baos);
-					if(coin.equals("GOSS")) {
-						Data.goss = baos.toByteArray();
-					}else if(coin.equals("CDM")) {
-						Data.cdm = baos.toByteArray();
-					}else if(coin.equals("VYI")) {
-						Data.vyi = baos.toByteArray();
-					}
+					Data.data = baos.toByteArray();
+					Data.coin = coin;
 					baos.close();
 				} catch (Exception ex) {
 					ex.printStackTrace();

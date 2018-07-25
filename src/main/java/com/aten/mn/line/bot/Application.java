@@ -106,10 +106,8 @@ public class Application extends SpringBootServletInitializer {
 			messages.add(jawabanDalamBentukTextMessage);
 		}
 		if(coin!=null && !coin.trim().equals("")) {
-			if((coin.equals("GOSS") && Data.goss!=null)
-					|| (coin.equals("CDM") && Data.cdm!=null)
-					|| (coin.equals("VYI") && Data.vyi!=null)) {
-				ImageMessage imageMessage = new ImageMessage("https://mn-line-bot.herokuapp.com/img/"+coin, "https://mn-line-bot.herokuapp.com/img/"+coin);
+			if(coin.equals(Data.coin)) {
+				ImageMessage imageMessage = new ImageMessage("https://mn-line-bot.herokuapp.com/img", "https://mn-line-bot.herokuapp.com/img");
 				//				ImageMessage imageMessage = new ImageMessage("https://cdn4.iconfinder.com/data/icons/network-and-sharing-line-icons-vol-1/48/02-512.png", "https://cdn4.iconfinder.com/data/icons/network-and-sharing-line-icons-vol-1/48/02-512.png");
 				messages.add(imageMessage);
 			}
