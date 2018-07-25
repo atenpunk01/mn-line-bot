@@ -274,7 +274,7 @@ public class Charts {
 			view.repaintDevice();
 			view.repaint();
 			String fileName = System.getProperty("user.dir") + "/src/main/resources/static/WEB-INF/img" + File.separator + coin+".png";
-			System.out.println(fileName);
+			System.out.println("fileName : "+fileName);
 			try {
 				view.setSize(1000, 650);
 				int w = (int) view.getBounds().getWidth();
