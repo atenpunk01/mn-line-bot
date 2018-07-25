@@ -40,15 +40,17 @@ public class HomeController {
     
     @RequestMapping(value = "/img/CDM", method = RequestMethod.GET)
     public void getImageCDM(HttpServletResponse response) throws IOException {
-        InputStream in = new ClassPathResource("static/WEB-INF/img/CDM.png").getInputStream();
-        response.setContentType(MediaType.IMAGE_PNG_VALUE);
+//        InputStream in = new ClassPathResource("static/WEB-INF/img/CDM.png").getInputStream();
+//        response.setContentType(MediaType.IMAGE_PNG_VALUE);
+    	InputStream in = new ByteArrayInputStream(Data.cdm);
         IOUtils.copy(in, response.getOutputStream());
     }
     
     @RequestMapping(value = "/img/VYI", method = RequestMethod.GET)
     public void getImageVYI(HttpServletResponse response) throws IOException {
-        InputStream in = new ClassPathResource("static/WEB-INF/img/VYI.png").getInputStream();
-        response.setContentType(MediaType.IMAGE_PNG_VALUE);
+//        InputStream in = new ClassPathResource("static/WEB-INF/img/VYI.png").getInputStream();
+//        response.setContentType(MediaType.IMAGE_PNG_VALUE);
+    	InputStream in = new ByteArrayInputStream(Data.vyi);
         IOUtils.copy(in, response.getOutputStream());
     }
 }
