@@ -37,17 +37,19 @@ public class LineBot {
 	private List<CoinModel> listCp = null;
 	private List<CoinModel> listBx = null;
 	private String messageMno = "";
+	private boolean chkImage;
 
 	public static void main(String[] args) {
 		LineBot bot = new LineBot();
-		bot.genData("VYI");
+		bot.genData("VYI",true);
 
 		//		CoinModel coinModel = new CoinModel();
 		//		coinModel.setName("BTC");
 		//		bot.priceBX(coinModel);
 	}
 
-	public String genData(String coin) {
+	public String genData(String coin, boolean chkImage) {
+		this.chkImage = chkImage;
 		String message = "";
 		loadFixData();
 		try {
@@ -443,71 +445,73 @@ public class LineBot {
 					}
 
 
-					String date = "";
-					String node = "";
-					String roi = "";
-					String price = "";
-					index = 0;
-					for(String data:responseChart) {
-						//					System.out.println((index)+" : "+data);
-						index++;
-						if(index==8) {
-							date = (data.split(" ")[1])
-									.replaceAll("\\[", "")
-									.replaceAll("\\],", "")
-									.replaceAll("\"", "");
+					if(chkImage) {
+						String date = "";
+						String node = "";
+						String roi = "";
+						String price = "";
+						index = 0;
+						for(String data:responseChart) {
+							//					System.out.println((index)+" : "+data);
+							index++;
+							if(index==8) {
+								date = (data.split(" ")[1])
+										.replaceAll("\\[", "")
+										.replaceAll("\\],", "")
+										.replaceAll("\"", "");
+							}
+							if(index==16) {
+								node = (data.split(" ")[1])
+										.replaceAll("\\[", "")
+										.replaceAll("\\],", "")
+										.replaceAll("\"", "");
+							}
+							if(index==24) {
+								roi = (data.split(" ")[1])
+										.replaceAll("\\[", "")
+										.replaceAll("\\],", "")
+										.replaceAll("\"", "");
+							}
+							if(index==37) {
+								price = (data.split(" ")[1])
+										.replaceAll("\\[", "")
+										.replaceAll("\\],", "")
+										.replaceAll("\"", "");
+							}					
 						}
-						if(index==16) {
-							node = (data.split(" ")[1])
-									.replaceAll("\\[", "")
-									.replaceAll("\\],", "")
-									.replaceAll("\"", "");
+						System.out.println("date : "+date);
+						System.out.println("node : "+node);
+						System.out.println("roi : "+roi);
+						System.out.println("price : "+price);
+						String[] dateArray = date.split(",");
+						String[] nodeArray = node.split(",");
+						String[] roiArray = roi.split(",");
+						String[] priceArray = price.split(",");
+						String[] lable = new String[30];
+						double[] value = new double[30];
+						int[] node2 = new int[30];
+						int begin = dateArray.length>30?dateArray.length-30:0;
+						int j=0;
+						double maxPrice = 0;
+						for(int i=begin;i<dateArray.length;i++) {
+							//						lable[j] = dateArray[i].split("-")[0]+"-"+dateArray[i].split("-")[1];
+							lable[j] = dateArray[i].split("-")[1];
+							value[j] = new BigDecimal(priceArray[i].split("\\.")[1]).doubleValue();
+							if(maxPrice==0) {
+								maxPrice = value[j];
+							}
+							if(maxPrice<value[j]) {
+								maxPrice = value[j];
+							}
+							j++;								
 						}
-						if(index==24) {
-							roi = (data.split(" ")[1])
-									.replaceAll("\\[", "")
-									.replaceAll("\\],", "")
-									.replaceAll("\"", "");
+						for(int i=0;i<lable.length;i++) {
+							System.out.println(i+" : "+lable[i]+", "+value[i]);
 						}
-						if(index==37) {
-							price = (data.split(" ")[1])
-									.replaceAll("\\[", "")
-									.replaceAll("\\],", "")
-									.replaceAll("\"", "");
-						}					
+						Charts charts = new Charts();
+						maxPrice = maxPrice-(maxPrice % 10);
+						charts.genImage(coin,lable,value,node2,coinsLocked,(maxPrice+(maxPrice/8)),(maxPrice+(maxPrice/8)));
 					}
-					System.out.println("date : "+date);
-					System.out.println("node : "+node);
-					System.out.println("roi : "+roi);
-					System.out.println("price : "+price);
-					String[] dateArray = date.split(",");
-					String[] nodeArray = node.split(",");
-					String[] roiArray = roi.split(",");
-					String[] priceArray = price.split(",");
-					String[] lable = new String[30];
-					double[] value = new double[30];
-					int[] node2 = new int[30];
-					int begin = dateArray.length>30?dateArray.length-30:0;
-					int j=0;
-					double maxPrice = 0;
-					for(int i=begin;i<dateArray.length;i++) {
-						//						lable[j] = dateArray[i].split("-")[0]+"-"+dateArray[i].split("-")[1];
-						lable[j] = dateArray[i].split("-")[1];
-						value[j] = new BigDecimal(priceArray[i].split("\\.")[1]).doubleValue();
-						if(maxPrice==0) {
-							maxPrice = value[j];
-						}
-						if(maxPrice<value[j]) {
-							maxPrice = value[j];
-						}
-						j++;								
-					}
-					for(int i=0;i<lable.length;i++) {
-						System.out.println(i+" : "+lable[i]+", "+value[i]);
-					}
-					Charts charts = new Charts();
-					maxPrice = maxPrice-(maxPrice % 10);
-					charts.genImage(coin,lable,value,node2,coinsLocked,(maxPrice+(maxPrice/8)),(maxPrice+(maxPrice/8)));
 				}catch (Exception e) {
 					e.printStackTrace();
 				}

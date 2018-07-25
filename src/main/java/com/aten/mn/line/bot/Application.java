@@ -50,14 +50,14 @@ public class Application extends SpringBootServletInitializer {
 				String coin = pesan.startsWith("/p ")?pesan.split(" ")[1]:pesan.substring(1, pesan.length());				
 				System.out.println("coin : "+coin);
 				if(pesan.startsWith("/p")) {
-					String message = new LineBot().masternodeOnline(coin);
+					String message = new LineBot().genData(coin,true);
 					if(message==null || message.equals("")) {
 						message = coin.toUpperCase()+" not found data";
 					}
 					String replyToken = messageEvent.getReplyToken();
 					balasChatDenganRandomJawaban(replyToken, message,coin);
 				}else {
-					String message = new LineBot().genData(coin);
+					String message = new LineBot().genData(coin,false);
 					if(message==null || message.equals(""))
 						message = coin.toUpperCase()+" not found data";
 					String replyToken = messageEvent.getReplyToken();
@@ -104,15 +104,16 @@ public class Application extends SpringBootServletInitializer {
 			TextMessage jawabanDalamBentukTextMessage = new TextMessage(jawaban);
 			messages.add(jawabanDalamBentukTextMessage);
 		}
-		if(coin!=null && !coin.trim().equals("")) {
-			String fileName = System.getProperty("user.dir") + "/src/main/resources/static/WEB-INF/img" + File.separator + coin+".png";
-			System.out.println(fileName);
-			File file = new File(fileName);
-			if(!file.exists()) {
-				ImageMessage imageMessage = new ImageMessage("https://mn-line-bot.herokuapp.com/img/"+coin, "https://mn-line-bot.herokuapp.com/img/"+coin);
+//		if(coin!=null && !coin.trim().equals("")) {
+//			String fileName = System.getProperty("user.dir") + "/src/main/resources/static/WEB-INF/img" + File.separator + coin+".png";
+//			System.out.println(fileName);
+//			File file = new File(fileName);
+//			if(!file.exists()) {
+//				ImageMessage imageMessage = new ImageMessage("https://mn-line-bot.herokuapp.com/img/"+coin, "https://mn-line-bot.herokuapp.com/img/"+coin);
+				ImageMessage imageMessage = new ImageMessage("https://cdn-images-1.medium.com/max/560/1*0JEUZVnaFlcNy_uLCDu6dg.png", "https://cdn-images-1.medium.com/max/560/1*0JEUZVnaFlcNy_uLCDu6dg.png");
 				messages.add(imageMessage);
-			}
-		}
+//			}
+//		}
 		try {
 			lineMessagingClient
 			.replyMessage(new ReplyMessage(replyToken, messages))
