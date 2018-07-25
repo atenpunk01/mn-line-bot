@@ -56,20 +56,12 @@ public class Application extends SpringBootServletInitializer {
 			if(pesan.startsWith("/")) {
 				String coin = pesan.startsWith("/p ")?pesan.split(" ")[1]:pesan.substring(1, pesan.length());				
 				System.out.println("coin : "+coin);
-				if(pesan.startsWith("/p")) {
-					String message = new LineBot().genData(coin,true);
-					if(message==null || message.equals("")) {
-						message = coin.toUpperCase()+" not found data";
-					}
-					String replyToken = messageEvent.getReplyToken();
-					balasChatDenganRandomJawaban(replyToken, message,coin.toUpperCase());
-				}else {
-					String message = new LineBot().genData(coin,false);
-					if(message==null || message.equals(""))
-						message = coin.toUpperCase()+" not found data";
-					String replyToken = messageEvent.getReplyToken();
-					balasChatDenganRandomJawaban(replyToken, message);
+				String message = new LineBot().genData(coin,true);
+				if(message==null || message.equals("")) {
+					message = coin.toUpperCase()+" not found data";
 				}
+				String replyToken = messageEvent.getReplyToken();
+				balasChatDenganRandomJawaban(replyToken, message,coin.toUpperCase());
 			}else if(pesan.equals("atenpunk")){
 				String jawaban = getRandomJawaban();
 				String replyToken = messageEvent.getReplyToken();
