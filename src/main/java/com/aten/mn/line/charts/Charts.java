@@ -175,9 +175,9 @@ public class Charts {
 				bardefaultaxislabel.setText(abarsymbol[k].getSymbol());
 				bardefaultaxislabel.setTextPaddingY(1);
 				bardefaultaxislabel.setOffsetY(10);
-//				bardefaultaxislabel.setOffsetX(10);
-//				bardefaultaxislabel.setTextPaddingX(10);
-//				bardefaultaxislabel.setTextPaddingY(10);
+				//				bardefaultaxislabel.setOffsetX(10);
+				//				bardefaultaxislabel.setTextPaddingX(10);
+				//				bardefaultaxislabel.setTextPaddingY(10);
 				abarsymbol[k].setAxisLabel(bardefaultaxislabel);
 				view.repaintPart(WindowPart.South);
 			}
@@ -274,20 +274,26 @@ public class Charts {
 			pieslice.addSliceLabel(pieborderlabel);
 			view.repaintDevice();
 			view.repaint();
-//			String fileName = System.getProperty("user.dir") + "/src/main/resources/static/WEB-INF/img" + File.separator + coin+".png";
-//			System.out.println("fileName : "+fileName);
+			//			String fileName = System.getProperty("user.dir") + "/src/main/resources/static/WEB-INF/img" + File.separator + coin+".png";
+			//			System.out.println("fileName : "+fileName);
 			try {
 				view.setSize(1000, 650);
 				int w = (int) view.getBounds().getWidth();
 				int h = (int) view.getBounds().getHeight();
 				BufferedImage image = view.getImageView(w, h);
 				try {
-//					FileOutputStream out = new FileOutputStream(fileName);
-//					ImageIO.write(image, "png".toLowerCase(), out);
-//					out.close();
+					//					FileOutputStream out = new FileOutputStream(fileName);
+					//					ImageIO.write(image, "png".toLowerCase(), out);
+					//					out.close();
 					ByteArrayOutputStream baos = new ByteArrayOutputStream();
 					ImageIO.write(image, "png", baos);
-					Data.goss = baos.toByteArray();
+					if(coin.equals("GOSS")) {
+						Data.goss = baos.toByteArray();
+					}else if(coin.equals("CDM")) {
+						Data.cdm = baos.toByteArray();
+					}else if(coin.equals("VYI")) {
+						Data.vyi = baos.toByteArray();
+					}
 					baos.close();
 				} catch (Exception ex) {
 					ex.printStackTrace();
