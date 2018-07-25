@@ -720,7 +720,8 @@ public class LineBot {
 			HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
 			URL url = new URL(cryptoBridgeTickerApi);
 			HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
-			connection.setConnectTimeout(1000*5);
+			connection.setConnectTimeout(1000*3);
+			connection.setReadTimeout(1000*3);
 			connection.setDoOutput(true);
 			connection.connect();
 
