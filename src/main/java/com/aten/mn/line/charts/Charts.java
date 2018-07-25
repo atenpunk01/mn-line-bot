@@ -2,6 +2,7 @@ package com.aten.mn.line.charts;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 
@@ -273,17 +274,21 @@ public class Charts {
 			pieslice.addSliceLabel(pieborderlabel);
 			view.repaintDevice();
 			view.repaint();
-			String fileName = System.getProperty("user.dir") + "/src/main/resources/static/WEB-INF/img" + File.separator + coin+".png";
-			System.out.println("fileName : "+fileName);
+//			String fileName = System.getProperty("user.dir") + "/src/main/resources/static/WEB-INF/img" + File.separator + coin+".png";
+//			System.out.println("fileName : "+fileName);
 			try {
 				view.setSize(1000, 650);
 				int w = (int) view.getBounds().getWidth();
 				int h = (int) view.getBounds().getHeight();
 				BufferedImage image = view.getImageView(w, h);
 				try {
-					FileOutputStream out = new FileOutputStream(fileName);
-					ImageIO.write(image, "png".toLowerCase(), out);
-					out.close();
+//					FileOutputStream out = new FileOutputStream(fileName);
+//					ImageIO.write(image, "png".toLowerCase(), out);
+//					out.close();
+					ByteArrayOutputStream baos = new ByteArrayOutputStream();
+					ImageIO.write(image, "png", baos);
+					Data.goss = baos.toByteArray();
+					baos.close();
 				} catch (Exception ex) {
 					ex.printStackTrace();
 				}
