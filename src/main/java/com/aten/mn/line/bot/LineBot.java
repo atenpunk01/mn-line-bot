@@ -367,7 +367,7 @@ public class LineBot {
 							}
 						}
 					}	
-					
+
 					if(inputLine.contains("<canvas id=\"canvas\"")) {
 						chkChart = true;
 					}
@@ -441,8 +441,8 @@ public class LineBot {
 							}
 						}
 					}
-					
-					
+
+
 					String date = "";
 					String node = "";
 					String roi = "";
@@ -491,7 +491,7 @@ public class LineBot {
 					int j=0;
 					double maxPrice = 0;
 					for(int i=begin;i<dateArray.length;i++) {
-//						lable[j] = dateArray[i].split("-")[0]+"-"+dateArray[i].split("-")[1];
+						//						lable[j] = dateArray[i].split("-")[0]+"-"+dateArray[i].split("-")[1];
 						lable[j] = dateArray[i].split("-")[1];
 						value[j] = new BigDecimal(priceArray[i].split("\\.")[1]).doubleValue();
 						if(maxPrice==0) {
@@ -505,14 +505,14 @@ public class LineBot {
 					for(int i=0;i<lable.length;i++) {
 						System.out.println(i+" : "+lable[i]+", "+value[i]);
 					}
-//					Charts charts = new Charts();
-//					maxPrice = maxPrice-(maxPrice % 10);
-//					charts.genImage(coin,lable,value,node2,coinsLocked,(maxPrice+(maxPrice/8)),(maxPrice+(maxPrice/8)));
+					Charts charts = new Charts();
+					maxPrice = maxPrice-(maxPrice % 10);
+					charts.genImage(coin,lable,value,node2,coinsLocked,(maxPrice+(maxPrice/8)),(maxPrice+(maxPrice/8)));
 				}catch (Exception e) {
 					e.printStackTrace();
 				}
-				
-				
+
+
 				//				System.out.println(messageMno);
 			} else {
 				throw new Exception("Error:(StatusCode)" + statusCode + ", " + connection.getResponseMessage());
