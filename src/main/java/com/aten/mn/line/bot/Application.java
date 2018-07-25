@@ -2,8 +2,11 @@ package com.aten.mn.line.bot;
 
 
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Random;
 import java.util.concurrent.ExecutionException;
 
@@ -30,6 +33,8 @@ public class Application extends SpringBootServletInitializer {
 
 	@Autowired
 	private LineMessagingClient lineMessagingClient;
+	
+	private SimpleDateFormat sdf = new SimpleDateFormat("yyyymmddHHmmssSSS",Locale.US);
 
 	@Override
 	protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
@@ -105,9 +110,12 @@ public class Application extends SpringBootServletInitializer {
 			TextMessage jawabanDalamBentukTextMessage = new TextMessage(jawaban);
 			messages.add(jawabanDalamBentukTextMessage);
 		}
+		System.out.println("send coin : "+coin);
 		if(coin!=null && !coin.trim().equals("")) {
 			if(coin.equals(Data.coin)) {
-				ImageMessage imageMessage = new ImageMessage("https://mn-line-bot.herokuapp.com/img", "https://mn-line-bot.herokuapp.com/img");
+				String url = "https://mn-line-bot.herokuapp.com/img/"+sdf.format(new Date());
+				System.out.println("send url : "+url);
+				ImageMessage imageMessage = new ImageMessage(url,url);
 				//				ImageMessage imageMessage = new ImageMessage("https://cdn4.iconfinder.com/data/icons/network-and-sharing-line-icons-vol-1/48/02-512.png", "https://cdn4.iconfinder.com/data/icons/network-and-sharing-line-icons-vol-1/48/02-512.png");
 				messages.add(imageMessage);
 			}
