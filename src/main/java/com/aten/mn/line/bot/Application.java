@@ -115,7 +115,7 @@ public class Application extends SpringBootServletInitializer {
 		if(coin!=null && !coin.trim().equals("")) {
 			for(Coin coinModel:Data.coinList) {
 				if(coinModel.getCoin().equals(coin)) {
-					String url = "https://mn-line-bot.herokuapp.com/img/"+sdf.format(new Date()+"?coin="+coin);
+					String url = "https://mn-line-bot.herokuapp.com/img/"+(sdf.format(new Date())+"?coin="+coin);
 					System.out.println("send url : "+url);
 					ImageMessage imageMessage = new ImageMessage(url,url);
 					//				ImageMessage imageMessage = new ImageMessage("https://cdn4.iconfinder.com/data/icons/network-and-sharing-line-icons-vol-1/48/02-512.png", "https://cdn4.iconfinder.com/data/icons/network-and-sharing-line-icons-vol-1/48/02-512.png");
