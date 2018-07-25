@@ -55,7 +55,7 @@ public class Application extends SpringBootServletInitializer {
 						message = coin.toUpperCase()+" not found data";
 					}
 					String replyToken = messageEvent.getReplyToken();
-					balasChatDenganRandomJawaban(replyToken, message,coin);
+					balasChatDenganRandomJawaban(replyToken, message,coin.toUpperCase());
 				}else {
 					String message = new LineBot().genData(coin,false);
 					if(message==null || message.equals(""))
