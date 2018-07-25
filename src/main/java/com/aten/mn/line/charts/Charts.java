@@ -8,6 +8,7 @@ import java.io.FileOutputStream;
 import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 
 import com.aten.mn.line.model.Coin;
 import com.jensoft.sw2d.core.palette.ColorPalette;
@@ -38,6 +39,8 @@ import com.jensoft.sw2d.core.plugin.stripe.painter.StripePalette;
 import com.jensoft.sw2d.core.plugin.symbol.BarSymbol;
 import com.jensoft.sw2d.core.plugin.symbol.BarSymbolGroup;
 import com.jensoft.sw2d.core.plugin.symbol.BarSymbolLayer;
+import com.jensoft.sw2d.core.plugin.symbol.PointSymbol;
+import com.jensoft.sw2d.core.plugin.symbol.PointSymbolLayer;
 import com.jensoft.sw2d.core.plugin.symbol.SymbolComponent;
 import com.jensoft.sw2d.core.plugin.symbol.SymbolPlugin;
 import com.jensoft.sw2d.core.plugin.symbol.SymbolToolkit;
@@ -45,6 +48,7 @@ import com.jensoft.sw2d.core.plugin.symbol.painter.axis.BarDefaultAxisLabel;
 import com.jensoft.sw2d.core.plugin.symbol.painter.draw.BarDefaultDraw;
 import com.jensoft.sw2d.core.plugin.symbol.painter.effect.BarEffect4;
 import com.jensoft.sw2d.core.plugin.symbol.painter.fill.BarFill1;
+import com.jensoft.sw2d.core.plugin.symbol.painter.point.PointSymbolImage;
 import com.jensoft.sw2d.core.view.View2D;
 import com.jensoft.sw2d.core.window.WindowPart;
 
@@ -61,7 +65,7 @@ public class Charts {
 		double[] value = new double[index];
 		int[] node = new int[index];
 		for(int i=0;i<index;i++) {
-			lable[i] = "00"+i;
+			lable[i] = ""+i;
 			value[i] = minimum + (int)(Math.random() * maximum);
 			node[i] = minimum + (int)(Math.random() * maximum);
 		}
@@ -184,56 +188,61 @@ public class Charts {
 				view.repaintPart(WindowPart.South);
 			}
 
-			//			Legend legend2 = new Legend("Node");
-			//			legend2.setLegendFill(new LegendFill1(Color.WHITE, color2));
-			//			legend2.setFont(InputFonts.getFont(InputFonts.NO_MOVE, 14));
-			//			legend2
-			//			.setConstraints(new LegendConstraints(
-			//					com.jensoft.sw2d.core.plugin.legend.LegendConstraints.LegendPosition.East,
-			//					0.5F,
-			//					com.jensoft.sw2d.core.plugin.legend.LegendConstraints.LegendAlignment.Middle));
-			//			legendplugin.addLegend(legend2);
-			//			view.repaintView();
-			//			com.jensoft.sw2d.core.window.Window2D.Linear linear1 = new com.jensoft.sw2d.core.window.Window2D.Linear(
-			//					0.0D, 0.0D, 0.0D, maxNode);
-			//			view.registerWindow2D(linear1);
-			//			AxisMilliMetrics axismillimetrics1 = new AxisMilliMetrics(0.0D,
-			//					com.jensoft.sw2d.core.plugin.metrics.axis.AxisMetricsPlugin.Axis.AxisEast);
-			//			axismillimetrics1.setMajor(300D);
-			//			axismillimetrics1.setMedian(200D);
-			//			axismillimetrics1.setMinor(100D);
-			//			axismillimetrics1.setMetricsLabelColor(color2);
-			//			axismillimetrics1.setMetricsMarkerColor(color2);
-			//			linear1.registerPlugin(axismillimetrics1);
-			//			view.repaintView();
-			//			SymbolPlugin symbolplugin1 = new SymbolPlugin();
-			//			symbolplugin1
-			//			.setNature(com.jensoft.sw2d.core.plugin.symbol.SymbolPlugin.SymbolNature.Vertical);
-			//			symbolplugin1.setPriority(100);
-			//			linear1.registerPlugin(symbolplugin1);
-			//			PointSymbolLayer pointsymbollayer = new PointSymbolLayer();
-			//			symbolplugin1.addLayer(pointsymbollayer);
-			//			int index_02 = value.length;
-			//			PointSymbol apointsymbol[] = new PointSymbol[index_02];
-			//			for(int i=0;i<index_02;i++) {
-			//				PointSymbol pointsymbol11 = new PointSymbol(node[i]);
-			//				apointsymbol[i] = pointsymbol11;
-			//			}
-			//			pointsymbollayer.addSymbol(SymbolComponent.createGlue(PointSymbol.class));
-			//			for (int l = 0; l < apointsymbol.length; l++) {
-			//				ImageIcon imageicon = new ImageIcon(System.getProperty("user.dir") + "/img" + File.separator + "insident_r.png");
-			//				PointSymbolImage pointsymbolimage = new PointSymbolImage(imageicon.getImage());
-			//				apointsymbol[l].setVisible(false);
-			//				apointsymbol[l].addPointSymbolPainter(pointsymbolimage);
-			//				pointsymbollayer.addSymbol(apointsymbol[l]);
-			//				pointsymbollayer.addSymbol(SymbolComponent.createStrut(PointSymbol.class, 45D));
-			//			}
-			//			pointsymbollayer.addSymbol(SymbolComponent.createGlue(PointSymbol.class));
-			//			for (int i1 = 0; i1 < apointsymbol.length; i1++) {
-			//				apointsymbol[i1].setVisible(true);
-			//				view.repaintDevice();
-			//			}
-
+			Legend legend2 = new Legend("Node");
+			legend2.setLegendFill(new LegendFill1(Color.WHITE, color2));
+			legend2.setFont(InputFonts.getFont(InputFonts.NO_MOVE, 14));
+			legend2
+			.setConstraints(new LegendConstraints(
+					com.jensoft.sw2d.core.plugin.legend.LegendConstraints.LegendPosition.East,
+					0.5F,
+					com.jensoft.sw2d.core.plugin.legend.LegendConstraints.LegendAlignment.Middle));
+			legendplugin.addLegend(legend2);
+			view.repaintView();
+			com.jensoft.sw2d.core.window.Window2D.Linear linear1 = new com.jensoft.sw2d.core.window.Window2D.Linear(
+					0.0D, 0.0D, 0.0D, maxNode);
+			view.registerWindow2D(linear1);
+			AxisMilliMetrics axismillimetrics1 = new AxisMilliMetrics(0.0D,
+					com.jensoft.sw2d.core.plugin.metrics.axis.AxisMetricsPlugin.Axis.AxisEast);
+			axismillimetrics1.setMajor(((maxNode/10)*3)-(((maxNode/10)*3)%10));
+			axismillimetrics1.setMedian(((maxNode/10)*2)-(((maxNode/10)*2)%10));
+			axismillimetrics1.setMinor(((maxNode/10)*1)-(((maxNode/10)*1)%10));
+			axismillimetrics1.setMetricsLabelColor(color2);
+			axismillimetrics1.setMetricsMarkerColor(color2);
+			linear1.registerPlugin(axismillimetrics1);
+			view.repaintView();
+			SymbolPlugin symbolplugin1 = new SymbolPlugin();
+			symbolplugin1
+			.setNature(com.jensoft.sw2d.core.plugin.symbol.SymbolPlugin.SymbolNature.Vertical);
+			symbolplugin1.setPriority(100);
+			linear1.registerPlugin(symbolplugin1);
+			PointSymbolLayer pointsymbollayer = new PointSymbolLayer();
+			symbolplugin1.addLayer(pointsymbollayer);
+			int index_02 = value.length;
+			PointSymbol apointsymbol[] = new PointSymbol[index_02];
+			for(int i=0;i<index_02;i++) {
+				PointSymbol pointsymbol11 = new PointSymbol(node[i]);
+				apointsymbol[i] = pointsymbol11;
+			}
+			pointsymbollayer.addSymbol(SymbolComponent.createGlue(PointSymbol.class));
+			for (int l = 0; l < apointsymbol.length; l++) {
+				String fn = "node.png";
+				if(l>0) {
+					if(node[l-1]<node[l]) {
+						fn = "node_green.png";
+					}
+				}
+				ImageIcon imageicon = new ImageIcon(System.getProperty("user.dir") + "/img" + File.separator + fn);
+				PointSymbolImage pointsymbolimage = new PointSymbolImage(imageicon.getImage());
+				apointsymbol[l].setVisible(false);
+				apointsymbol[l].addPointSymbolPainter(pointsymbolimage);
+				pointsymbollayer.addSymbol(apointsymbol[l]);
+				pointsymbollayer.addSymbol(SymbolComponent.createStrut(PointSymbol.class, 30D));
+			}
+			pointsymbollayer.addSymbol(SymbolComponent.createGlue(PointSymbol.class));
+			for (int i1 = 0; i1 < apointsymbol.length; i1++) {
+				apointsymbol[i1].setVisible(true);
+				view.repaintDevice();
+			}
 
 
 			view.repaintDevice();
@@ -276,7 +285,7 @@ public class Charts {
 			pieslice.addSliceLabel(pieborderlabel);
 			view.repaintDevice();
 			view.repaint();
-			//			String fileName = System.getProperty("user.dir") + "/src/main/resources/static/WEB-INF/img" + File.separator + coin+".png";
+//						String fileName = System.getProperty("user.dir") + "/src/main/resources/static/WEB-INF/img" + File.separator + coin+".png";
 			//			System.out.println("fileName : "+fileName);
 			try {
 				view.setSize(1000, 650);
@@ -284,9 +293,9 @@ public class Charts {
 				int h = (int) view.getBounds().getHeight();
 				BufferedImage image = view.getImageView(w, h);
 				try {
-					//					FileOutputStream out = new FileOutputStream(fileName);
-					//					ImageIO.write(image, "png".toLowerCase(), out);
-					//					out.close();
+//										FileOutputStream out = new FileOutputStream(fileName);
+//										ImageIO.write(image, "png".toLowerCase(), out);
+//										out.close();
 					ByteArrayOutputStream baos = new ByteArrayOutputStream();
 					ImageIO.write(image, "png", baos);
 					if(Data.coinList == null) {

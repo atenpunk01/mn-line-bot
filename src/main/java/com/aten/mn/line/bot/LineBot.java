@@ -498,24 +498,32 @@ public class LineBot {
 						int begin = dateArray.length>30?dateArray.length-30:0;
 						int j=0;
 						double maxPrice = 0;
+						int maxNode = 0;
 						for(int i=begin;i<dateArray.length;i++) {
 							//						lable[j] = dateArray[i].split("-")[0]+"-"+dateArray[i].split("-")[1];
 							lable[j] = dateArray[i].split("-")[1];
 							value[j] = new BigDecimal(priceArray[i].split("\\.")[1]).doubleValue();
+							node2[j] = Integer.parseInt(nodeArray[i]);
 							if(maxPrice==0) {
 								maxPrice = value[j];
 							}
 							if(maxPrice<value[j]) {
 								maxPrice = value[j];
 							}
+							if(maxNode==0) {
+								maxNode = node2[j];
+							}
+							if(maxNode<value[j]) {
+								maxNode = node2[j];
+							}
 							j++;								
 						}
 						for(int i=0;i<lable.length;i++) {
-							System.out.println(i+" : "+lable[i]+", "+value[i]);
+							System.out.println(i+" : "+lable[i]+", "+value[i]+", "+node2[i]);
 						}
 						Charts charts = new Charts();
 						maxPrice = maxPrice-(maxPrice % 10);
-						charts.genImage(coin,lable,value,node2,coinsLocked,(maxPrice+(maxPrice/8)),(maxPrice+(maxPrice/8)));
+						charts.genImage(coin,lable,value,node2,coinsLocked,(maxNode+(maxNode/8)),(maxPrice+(maxPrice/8)));
 					}
 				}catch (Exception e) {
 					e.printStackTrace();
