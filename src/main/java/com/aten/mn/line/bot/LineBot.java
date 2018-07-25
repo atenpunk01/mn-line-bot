@@ -407,16 +407,6 @@ public class LineBot {
 												avgBlock += Integer.parseInt(time.replaceAll("s", ""));
 											}
 										}
-									}else if(a.contains("Coins locked")) {
-										String temp_01 = a.split(" : ")[1];
-										String temp_02 = temp_01.split(" ")[1];
-										String temp_03 = temp_02.replaceAll("\\(", "");
-										String temp_04 = temp_03.replaceAll("%\\)", "");
-										System.out.println("temp_01 : "+temp_01);
-										System.out.println("temp_02 : "+temp_02);
-										System.out.println("temp_03 : "+temp_03);
-										System.out.println("temp_04 : "+temp_04);
-										coinsLocked = Double.parseDouble(temp_04);
 									}
 								}
 								int changeCollateral = 0;
@@ -446,6 +436,21 @@ public class LineBot {
 
 
 					if(chkImage) {
+						String[] dataArray = messageMno.split("\n");
+						for(String a:dataArray) {
+							if(a.contains("Coins locked")) {
+								String temp_01 = a.split(" : ")[1];
+								System.out.println("temp_01 : "+temp_01);
+								String temp_02 = temp_01.split(" ")[1];
+								System.out.println("temp_02 : "+temp_02);
+								String temp_03 = temp_02.replaceAll("\\(", "");
+								System.out.println("temp_03 : "+temp_03);
+								String temp_04 = temp_03.replaceAll("%\\)", "");
+								System.out.println("temp_04 : "+temp_04);
+								coinsLocked = Double.parseDouble(temp_04);
+							}
+						}
+						
 						String date = "";
 						String node = "";
 						String roi = "";
