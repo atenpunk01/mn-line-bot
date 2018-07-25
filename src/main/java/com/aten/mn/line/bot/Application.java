@@ -49,11 +49,20 @@ public class Application extends SpringBootServletInitializer {
 			if(pesan.startsWith("/")) {
 				String coin = pesan.startsWith("/p ")?pesan.split(" ")[1]:pesan.substring(1, pesan.length());				
 				System.out.println("coin : "+coin);
-				String message = new LineBot().genData(coin);
-				if(message==null || message.equals(""))
-					message = coin.toUpperCase()+" not found data";
-				String replyToken = messageEvent.getReplyToken();
-				balasChatDenganRandomJawaban(replyToken, message,coin);
+				if(pesan.startsWith("/p")) {
+					String message = new LineBot().masternodeOnline(coin);
+					if(message==null || message.equals("")) {
+						message = coin.toUpperCase()+" not found data";
+					}
+					String replyToken = messageEvent.getReplyToken();
+					balasChatDenganRandomJawaban(replyToken, message,coin);
+				}else {
+					String message = new LineBot().genData(coin);
+					if(message==null || message.equals(""))
+						message = coin.toUpperCase()+" not found data";
+					String replyToken = messageEvent.getReplyToken();
+					balasChatDenganRandomJawaban(replyToken, message);
+				}
 			}else if(pesan.equals("atenpunk")){
 				String jawaban = getRandomJawaban();
 				String replyToken = messageEvent.getReplyToken();
@@ -76,19 +85,34 @@ public class Application extends SpringBootServletInitializer {
 		return jawaban;
 	}
 
-	private void balasChatDenganRandomJawaban(String replyToken, String jawaban, String coin){
+	private void balasChatDenganRandomJawaban(String replyToken, String jawaban){
 		List<Message> messages = new ArrayList<Message>();
 		TextMessage jawabanDalamBentukTextMessage = new TextMessage(jawaban);
 		messages.add(jawabanDalamBentukTextMessage);
-//		if(coin!=null && !coin.trim().equals("")) {
-//			String fileName = System.getProperty("user.dir") + "/src/main/resources/static/WEB-INF/img" + File.separator + coin+".png";
-//			System.out.println(fileName);
-//			File file = new File(fileName);
-//			if(!file.exists()) {
-//				ImageMessage imageMessage = new ImageMessage("https://mn-line-bot.herokuapp.com/img"+coin, "https://mn-line-bot.herokuapp.com/img"+coin);
-//				messages.add(imageMessage);
-//			}
-//		}
+		try {
+			lineMessagingClient
+			.replyMessage(new ReplyMessage(replyToken, messages))
+			.get();
+		} catch (InterruptedException | ExecutionException e) {
+			System.out.println("Ada error chat");
+		}
+	}
+
+	private void balasChatDenganRandomJawaban(String replyToken, String jawaban, String coin){
+		List<Message> messages = new ArrayList<Message>();
+		if(replyToken!=null && !replyToken.trim().equals("")) {
+			TextMessage jawabanDalamBentukTextMessage = new TextMessage(jawaban);
+			messages.add(jawabanDalamBentukTextMessage);
+		}
+		if(coin!=null && !coin.trim().equals("")) {
+			String fileName = System.getProperty("user.dir") + "/src/main/resources/static/WEB-INF/img" + File.separator + coin+".png";
+			System.out.println(fileName);
+			File file = new File(fileName);
+			if(!file.exists()) {
+				ImageMessage imageMessage = new ImageMessage("https://mn-line-bot.herokuapp.com/img/"+coin, "https://mn-line-bot.herokuapp.com/img/"+coin);
+				messages.add(imageMessage);
+			}
+		}
 		try {
 			lineMessagingClient
 			.replyMessage(new ReplyMessage(replyToken, messages))
