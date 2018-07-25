@@ -1,9 +1,11 @@
 package com.aten.mn.line.charts;
 
+import java.util.List;
+
+import com.aten.mn.line.model.Coin;
+
 public class Data {
-	public static byte[] data;
-	public static String coin;
-	public static byte[] goss;
-	public static byte[] cdm;
-	public static byte[] vyi;
+	
+	public static List<Coin> coinList;
+	
 }

@@ -5,9 +5,11 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 
+import com.aten.mn.line.model.Coin;
 import com.jensoft.sw2d.core.palette.ColorPalette;
 import com.jensoft.sw2d.core.palette.InputFonts;
 import com.jensoft.sw2d.core.palette.PetalPalette;
@@ -287,8 +289,19 @@ public class Charts {
 					//					out.close();
 					ByteArrayOutputStream baos = new ByteArrayOutputStream();
 					ImageIO.write(image, "png", baos);
-					Data.data = baos.toByteArray();
-					Data.coin = coin;
+					if(Data.coinList == null) {
+						Data.coinList = new ArrayList<Coin>();
+					}
+					for(Coin coinModel:Data.coinList) {
+						if(coinModel.getCoin().equals(coin)) {
+							System.out.println("remove : "+Data.coinList.remove(coinModel));
+							break;
+						}
+					}
+					Coin c = new Coin();
+					c.setCoin(coin);
+					c.setData(baos.toByteArray());
+					Data.coinList.add(c);
 					baos.close();
 				} catch (Exception ex) {
 					ex.printStackTrace();

@@ -12,9 +12,11 @@ import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.aten.mn.line.charts.Data;
+import com.aten.mn.line.model.Coin;
 
 @RestController
 public class HomeController {
@@ -28,9 +30,18 @@ public class HomeController {
     }
     
     @RequestMapping(value = "/img/**", method = RequestMethod.GET)
-    public void getImageGOSS(HttpServletResponse response) throws IOException {
-    	InputStream in = new ByteArrayInputStream(Data.data);
-        IOUtils.copy(in, response.getOutputStream());
+    public void getImage(@RequestParam("coin") String coin, HttpServletResponse response) throws IOException {
+    	
+    	System.out.println("getImage : "+coin);
+    	System.out.println("Data.coinList size : "+Data.coinList.size());
+    	for(Coin coinModel:Data.coinList) {
+			if(coinModel.getCoin().equals(coin)) {
+				System.out.println("found : "+coinModel.getCoin());
+		    	InputStream in = new ByteArrayInputStream(coinModel.getData());
+		        IOUtils.copy(in, response.getOutputStream());
+		        break;
+			}
+		}
     }
     
 //    @RequestMapping(value = "/img/CDM", method = RequestMethod.GET)

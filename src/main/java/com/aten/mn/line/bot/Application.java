@@ -17,6 +17,7 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 
 import com.aten.mn.line.charts.Data;
+import com.aten.mn.line.model.Coin;
 import com.linecorp.bot.client.LineMessagingClient;
 import com.linecorp.bot.model.ReplyMessage;
 import com.linecorp.bot.model.event.MessageEvent;
@@ -33,7 +34,7 @@ public class Application extends SpringBootServletInitializer {
 
 	@Autowired
 	private LineMessagingClient lineMessagingClient;
-	
+
 	private SimpleDateFormat sdf = new SimpleDateFormat("yyyymmddHHmmssSSS",Locale.US);
 
 	@Override
@@ -112,12 +113,15 @@ public class Application extends SpringBootServletInitializer {
 		}
 		System.out.println("send coin : "+coin);
 		if(coin!=null && !coin.trim().equals("")) {
-			if(coin.equals(Data.coin)) {
-				String url = "https://mn-line-bot.herokuapp.com/img/"+sdf.format(new Date());
-				System.out.println("send url : "+url);
-				ImageMessage imageMessage = new ImageMessage(url,url);
-				//				ImageMessage imageMessage = new ImageMessage("https://cdn4.iconfinder.com/data/icons/network-and-sharing-line-icons-vol-1/48/02-512.png", "https://cdn4.iconfinder.com/data/icons/network-and-sharing-line-icons-vol-1/48/02-512.png");
-				messages.add(imageMessage);
+			for(Coin coinModel:Data.coinList) {
+				if(coinModel.getCoin().equals(coin)) {
+					String url = "https://mn-line-bot.herokuapp.com/img/"+sdf.format(new Date()+"?coin="+coin);
+					System.out.println("send url : "+url);
+					ImageMessage imageMessage = new ImageMessage(url,url);
+					//				ImageMessage imageMessage = new ImageMessage("https://cdn4.iconfinder.com/data/icons/network-and-sharing-line-icons-vol-1/48/02-512.png", "https://cdn4.iconfinder.com/data/icons/network-and-sharing-line-icons-vol-1/48/02-512.png");
+					messages.add(imageMessage);
+					break;
+				}
 			}
 		}
 		try {
