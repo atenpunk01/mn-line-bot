@@ -41,7 +41,7 @@ public class LineBot {
 
 	public static void main(String[] args) {
 		LineBot bot = new LineBot();
-		bot.genData("VYI",true);
+		bot.genData("CDM",true);
 
 		//		CoinModel coinModel = new CoinModel();
 		//		coinModel.setName("BTC");
@@ -513,7 +513,7 @@ public class LineBot {
 							if(maxNode==0) {
 								maxNode = node2[j];
 							}
-							if(maxNode<value[j]) {
+							if(maxNode<node2[j]) {
 								maxNode = node2[j];
 							}
 							j++;								
@@ -521,8 +521,11 @@ public class LineBot {
 						for(int i=0;i<lable.length;i++) {
 							System.out.println(i+" : "+lable[i]+", "+value[i]+", "+node2[i]);
 						}
+						System.out.println("maxNode : "+maxNode);
+						System.out.println("maxPrice : "+maxPrice);
 						Charts charts = new Charts();
 						maxPrice = maxPrice-(maxPrice % 10);
+						maxNode = maxNode-(maxNode % 10);
 						charts.genImage(coin,lable,value,node2,coinsLocked,(maxNode+(maxNode/8)),(maxPrice+(maxPrice/8)));
 					}
 				}catch (Exception e) {

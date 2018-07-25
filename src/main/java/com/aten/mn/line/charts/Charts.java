@@ -203,8 +203,8 @@ public class Charts {
 			view.registerWindow2D(linear1);
 			AxisMilliMetrics axismillimetrics1 = new AxisMilliMetrics(0.0D,
 					com.jensoft.sw2d.core.plugin.metrics.axis.AxisMetricsPlugin.Axis.AxisEast);
-			axismillimetrics1.setMajor(((maxNode/10)*3)-(((maxNode/10)*3)%10));
-			axismillimetrics1.setMedian(((maxNode/10)*2)-(((maxNode/10)*2)%10));
+			axismillimetrics1.setMajor(((maxNode/10)*6)-(((maxNode/10)*6)%10));
+			axismillimetrics1.setMedian(((maxNode/10)*3)-(((maxNode/10)*3)%10));
 			axismillimetrics1.setMinor(((maxNode/10)*1)-(((maxNode/10)*1)%10));
 			axismillimetrics1.setMetricsLabelColor(color2);
 			axismillimetrics1.setMetricsMarkerColor(color2);
@@ -225,10 +225,10 @@ public class Charts {
 			}
 			pointsymbollayer.addSymbol(SymbolComponent.createGlue(PointSymbol.class));
 			for (int l = 0; l < apointsymbol.length; l++) {
-				String fn = "node.png";
+				String fn = "node_green.png";
 				if(l>0) {
-					if(node[l-1]<node[l]) {
-						fn = "node_green.png";
+					if(node[l-1]>node[l]) {
+						fn = "node.png";
 					}
 				}
 				ImageIcon imageicon = new ImageIcon(System.getProperty("user.dir") + "/img" + File.separator + fn);
@@ -285,7 +285,7 @@ public class Charts {
 			pieslice.addSliceLabel(pieborderlabel);
 			view.repaintDevice();
 			view.repaint();
-//						String fileName = System.getProperty("user.dir") + "/src/main/resources/static/WEB-INF/img" + File.separator + coin+".png";
+//			String fileName = System.getProperty("user.dir") + "/src/main/resources/static/WEB-INF/img" + File.separator + coin+".png";
 			//			System.out.println("fileName : "+fileName);
 			try {
 				view.setSize(1000, 650);
@@ -293,9 +293,9 @@ public class Charts {
 				int h = (int) view.getBounds().getHeight();
 				BufferedImage image = view.getImageView(w, h);
 				try {
-//										FileOutputStream out = new FileOutputStream(fileName);
-//										ImageIO.write(image, "png".toLowerCase(), out);
-//										out.close();
+//					FileOutputStream out = new FileOutputStream(fileName);
+//					ImageIO.write(image, "png".toLowerCase(), out);
+//					out.close();
 					ByteArrayOutputStream baos = new ByteArrayOutputStream();
 					ImageIO.write(image, "png", baos);
 					if(Data.coinList == null) {
