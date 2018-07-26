@@ -223,7 +223,7 @@ public class Charts {
 				PointSymbol pointsymbol11 = new PointSymbol(node[i]);
 				apointsymbol[i] = pointsymbol11;
 			}
-			pointsymbollayer.addSymbol(SymbolComponent.createGlue(PointSymbol.class));
+			pointsymbollayer.addSymbol(SymbolComponent.createStrut(PointSymbol.class, 12D));
 			for (int l = 0; l < apointsymbol.length; l++) {
 				String fn = "node_green.png";
 				if(l>0) {
@@ -285,7 +285,7 @@ public class Charts {
 			pieslice.addSliceLabel(pieborderlabel);
 			view.repaintDevice();
 			view.repaint();
-//			String fileName = System.getProperty("user.dir") + "/src/main/resources/static/WEB-INF/img" + File.separator + coin+".png";
+			//			String fileName = System.getProperty("user.dir") + "/src/main/resources/static/WEB-INF/img" + File.separator + coin+".png";
 			//			System.out.println("fileName : "+fileName);
 			try {
 				view.setSize(1000, 650);
@@ -293,9 +293,9 @@ public class Charts {
 				int h = (int) view.getBounds().getHeight();
 				BufferedImage image = view.getImageView(w, h);
 				try {
-//					FileOutputStream out = new FileOutputStream(fileName);
-//					ImageIO.write(image, "png".toLowerCase(), out);
-//					out.close();
+					//					FileOutputStream out = new FileOutputStream(fileName);
+					//					ImageIO.write(image, "png".toLowerCase(), out);
+					//					out.close();
 					ByteArrayOutputStream baos = new ByteArrayOutputStream();
 					ImageIO.write(image, "png", baos);
 					if(Data.coinList == null) {
