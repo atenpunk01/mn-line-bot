@@ -200,7 +200,7 @@ public class LineBot {
 		long htrcMaxsupply = 210000000L;
 		int[] htrcBlock = new int[6];
 		int[] htrcCollateral = new int[6];
-		htrcBlock[0] = 320000;
+		htrcBlock[0] = 325000;
 		htrcCollateral[0] = 100000;
 		htrcBlock[1] = 500000;
 		htrcCollateral[1] = 150000;
