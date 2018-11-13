@@ -41,7 +41,7 @@ public class LineBot {
 
 	public static void main(String[] args) {
 		LineBot bot = new LineBot();
-		bot.genData("CDM",true);
+		bot.genData("GOSS",true);
 
 		//		CoinModel coinModel = new CoinModel();
 		//		coinModel.setName("BTC");
@@ -678,7 +678,7 @@ public class LineBot {
 						JSONObject ticker = head.getJSONObject("ticker");
 						String buy = ticker.getString("buy");
 						String sell = ticker.getString("sell");
-						String change = ticker.getString("change");
+						Double change = ticker.getDouble("change");
 						CoinModel model = new CoinModel();
 						buy = df9.format(Double.parseDouble(buy));
 						buy = (buy.substring(0, buy.length() - 1) + "'" + buy.substring(buy.length() - 1, buy.length()));
@@ -687,7 +687,7 @@ public class LineBot {
 						model.setName(coinModel.getName()+" (GV)");
 						model.setBuy(buy);
 						model.setSell(sell);
-						model.setChange(df.format(Double.parseDouble(change)));
+						model.setChange(df.format(change));
 						listGv.add(model);
 					}
 				}
