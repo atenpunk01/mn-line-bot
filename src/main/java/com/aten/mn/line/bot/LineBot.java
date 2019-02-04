@@ -926,9 +926,9 @@ public class LineBot {
 
 				String jsonData = response.toString();
 				JSONObject json = new JSONObject(jsonData);
-				String image01 = json.getString("url01");
-				String image02 = json.getString("url02");
-				String image03 = json.getString("url03");
+				String image01 = json.getString("image01");
+				String image02 = json.getString("image02");
+				String image03 = json.getString("image03");
 				if(image01!=null && !image01.equals("")) {
 					int indexofnewline = image01.indexOf("FFD8");
 					if (indexofnewline > 0) {
