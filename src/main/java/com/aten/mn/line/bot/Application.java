@@ -1,7 +1,6 @@
 package com.aten.mn.line.bot;
 
 
-import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -56,14 +55,17 @@ public class Application extends SpringBootServletInitializer {
 			if(pesan.startsWith("/")) {
 				String coin = pesan.startsWith("/p ")?pesan.split(" ")[1]:pesan.substring(1, pesan.length());				
 				System.out.println("coin : "+coin);
+				if(Data.coinList == null) {
+					Data.coinList = new ArrayList<Coin>();
+				}
 				LineBot lineBot = new LineBot(); 
 				String message = lineBot.genData(coin,true);
-				CoinModel image = lineBot.getImageBx();
+				List<Coin> imageList = lineBot.getImageBx();
 				if(message==null || message.equals("")) {
 					message = coin.toUpperCase()+" not found data";
 				}
 				String replyToken = messageEvent.getReplyToken();
-				balasChatDenganRandomJawaban(replyToken, message,coin.toUpperCase(),image);
+				balasChatDenganRandomJawaban(replyToken, message,coin.toUpperCase(),imageList);
 			}else if(pesan.equals("atenpunk")){
 				String jawaban = getRandomJawaban();
 				String replyToken = messageEvent.getReplyToken();
@@ -100,7 +102,7 @@ public class Application extends SpringBootServletInitializer {
 		}
 	}
 
-	private void balasChatDenganRandomJawaban(String replyToken, String jawaban, String coin, CoinModel image){
+	private void balasChatDenganRandomJawaban(String replyToken, String jawaban, String coin, List<Coin> imageList){
 		List<Message> messages = new ArrayList<Message>();
 		if(replyToken!=null && !replyToken.trim().equals("")) {
 			TextMessage jawabanDalamBentukTextMessage = new TextMessage(jawaban);
@@ -118,18 +120,24 @@ public class Application extends SpringBootServletInitializer {
 					break;
 				}
 			}
-			if(image!=null) {
-				if(image.getUrlImage01()!=null && !image.getUrlImage01().equals("")) {
-					ImageMessage imageMessage = new ImageMessage(image.getUrlImage01(),image.getUrlImage01());
-					messages.add(imageMessage);
-				}
-				if(image.getUrlImage02()!=null && !image.getUrlImage02().equals("")) {
-					ImageMessage imageMessage = new ImageMessage(image.getUrlImage02(),image.getUrlImage02());
-					messages.add(imageMessage);
-				}
-				if(image.getUrlImage03()!=null && !image.getUrlImage03().equals("")) {
-					ImageMessage imageMessage = new ImageMessage(image.getUrlImage03(),image.getUrlImage03());
-					messages.add(imageMessage);
+			if(imageList!=null) {
+				int index = 0;
+				for(Coin c:imageList) {
+					index++;
+					if(c!=null && c.getData()!=null) {
+						String name = "btc"+index;
+						c.setCoin(name);
+						for(Coin coinModel:Data.coinList) {
+							if(coinModel.getCoin().equals(name)) {
+								System.out.println("remove : "+Data.coinList.remove(coinModel));
+								break;
+							}
+						}
+						Data.coinList.add(c);
+						String url = "https://mn-line-bot.herokuapp.com/img/"+(sdf.format(new Date())+"?coin="+name);
+						ImageMessage imageMessage = new ImageMessage(url,url);
+						messages.add(imageMessage);
+					}
 				}
 			}
 		}

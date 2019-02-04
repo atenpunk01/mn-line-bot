@@ -20,6 +20,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.aten.mn.line.charts.Charts;
+import com.aten.mn.line.model.Coin;
 import com.google.gson.Gson;
 
 public class LineBot {	
@@ -38,7 +39,7 @@ public class LineBot {
 	private List<CoinModel> listCb = null;
 	private List<CoinModel> listCp = null;
 	private List<CoinModel> listBx = null;
-	private CoinModel imageBx = null;
+	private List<Coin> imageBx = null;
 	private String messageMno = "";
 	private boolean chkImage;
 
@@ -891,8 +892,8 @@ public class LineBot {
 		return listBx;
 	}
 
-	public CoinModel imageBX(CoinModel coinModel) {
-		imageBx = new CoinModel();
+	public void imageBX(CoinModel coinModel) {
+		imageBx = new ArrayList<Coin>();
 		try {
 			URL url = new URL(bxImageApi);
 			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -925,16 +926,39 @@ public class LineBot {
 
 				String jsonData = response.toString();
 				JSONObject json = new JSONObject(jsonData);
-				String url01 = json.getString("url01");
-				String url02 = json.getString("url02");
-				String url03 = json.getString("url03");
-				imageBx = coinModel;
-				imageBx.setUrlImage01(url01);
-				imageBx.setUrlImage02(url02);
-				imageBx.setUrlImage03(url03);
-				System.out.println(imageBx.getUrlImage01());
-				System.out.println(imageBx.getUrlImage02());
-				System.out.println(imageBx.getUrlImage03());
+				String image01 = json.getString("url01");
+				String image02 = json.getString("url02");
+				String image03 = json.getString("url03");
+				if(image01!=null && !image01.equals("")) {
+					int indexofnewline = image01.indexOf("FFD8");
+					if (indexofnewline > 0) {
+						image01 = image01.substring(indexofnewline, image01.length());
+					}
+					byte[] imageArray = toBinArray(image01);
+					Coin coin = new Coin();
+					coin.setData(imageArray);
+					imageBx.add(coin);
+				}
+				if(image02!=null && !image02.equals("")) {
+					int indexofnewline = image02.indexOf("FFD8");
+					if (indexofnewline > 0) {
+						image02 = image02.substring(indexofnewline, image02.length());
+					}
+					byte[] imageArray = toBinArray(image02);
+					Coin coin = new Coin();
+					coin.setData(imageArray);
+					imageBx.add(coin);
+				}
+				if(image03!=null && !image03.equals("")) {
+					int indexofnewline = image03.indexOf("FFD8");
+					if (indexofnewline > 0) {
+						image03 = image03.substring(indexofnewline, image03.length());
+					}
+					byte[] imageArray = toBinArray(image03);
+					Coin coin = new Coin();
+					coin.setData(imageArray);
+					imageBx.add(coin);
+				}
 			} else {
 				throw new Exception("Error:(StatusCode)" + statusCode + ", " + connection.getResponseMessage());
 			}
@@ -942,14 +966,30 @@ public class LineBot {
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
+	}
+
+	public static byte[] toBinArray( String hexStr ) {
+		byte bArray[] = new byte[hexStr.length() / 2];
+		for( int i = 0; i < (hexStr.length() / 2); i++ ) {
+			byte firstNibble = Byte.parseByte(hexStr.substring(2 * i, 2 * i + 1), 16); // [x,y)
+			byte secondNibble = Byte.parseByte(hexStr.substring(2 * i + 1, 2 * i + 2), 16);
+			int finalByte = (secondNibble) | (firstNibble << 4); // bit-operations
+			// only with
+			// numbers,
+			// not
+			// bytes.
+			bArray[i] = (byte) finalByte;
+		}
+		return bArray;
+	}
+
+	public List<Coin> getImageBx() {
 		return imageBx;
 	}
 
-	public CoinModel getImageBx() {
-		return imageBx;
-	}
-
-	public void setImageBx(CoinModel imageBx) {
+	public void setImageBx(List<Coin> imageBx) {
 		this.imageBx = imageBx;
 	}
+
+
 }
