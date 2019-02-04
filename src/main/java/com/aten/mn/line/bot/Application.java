@@ -56,16 +56,18 @@ public class Application extends SpringBootServletInitializer {
 			if(pesan.startsWith("/")) {
 				String coin = pesan.startsWith("/p ")?pesan.split(" ")[1]:pesan.substring(1, pesan.length());				
 				System.out.println("coin : "+coin);
-				String message = new LineBot().genData(coin,true);
+				LineBot lineBot = new LineBot(); 
+				String message = lineBot.genData(coin,true);
+				CoinModel image = lineBot.getImageBx();
 				if(message==null || message.equals("")) {
 					message = coin.toUpperCase()+" not found data";
 				}
 				String replyToken = messageEvent.getReplyToken();
-				balasChatDenganRandomJawaban(replyToken, message,coin.toUpperCase());
+				balasChatDenganRandomJawaban(replyToken, message,coin.toUpperCase(),image);
 			}else if(pesan.equals("atenpunk")){
 				String jawaban = getRandomJawaban();
 				String replyToken = messageEvent.getReplyToken();
-				balasChatDenganRandomJawaban(replyToken, jawaban,null);
+				balasChatDenganRandomJawaban(replyToken, jawaban,null,null);
 			}
 		}catch (Exception e) {
 			System.out.println("ERROR : "+e.getMessage());
@@ -97,7 +99,7 @@ public class Application extends SpringBootServletInitializer {
 		}
 	}
 
-	private void balasChatDenganRandomJawaban(String replyToken, String jawaban, String coin){
+	private void balasChatDenganRandomJawaban(String replyToken, String jawaban, String coin, CoinModel image){
 		List<Message> messages = new ArrayList<Message>();
 		if(replyToken!=null && !replyToken.trim().equals("")) {
 			TextMessage jawabanDalamBentukTextMessage = new TextMessage(jawaban);
@@ -113,6 +115,20 @@ public class Application extends SpringBootServletInitializer {
 					//				ImageMessage imageMessage = new ImageMessage("https://cdn4.iconfinder.com/data/icons/network-and-sharing-line-icons-vol-1/48/02-512.png", "https://cdn4.iconfinder.com/data/icons/network-and-sharing-line-icons-vol-1/48/02-512.png");
 					messages.add(imageMessage);
 					break;
+				}
+			}
+			if(image!=null) {
+				if(image.getUrlImage01()!=null && !image.getUrlImage01().equals("")) {
+					ImageMessage imageMessage = new ImageMessage(image.getUrlImage01(),image.getUrlImage01());
+					messages.add(imageMessage);
+				}
+				if(image.getUrlImage02()!=null && !image.getUrlImage02().equals("")) {
+					ImageMessage imageMessage = new ImageMessage(image.getUrlImage02(),image.getUrlImage02());
+					messages.add(imageMessage);
+				}
+				if(image.getUrlImage03()!=null && !image.getUrlImage03().equals("")) {
+					ImageMessage imageMessage = new ImageMessage(image.getUrlImage03(),image.getUrlImage03());
+					messages.add(imageMessage);
 				}
 			}
 		}

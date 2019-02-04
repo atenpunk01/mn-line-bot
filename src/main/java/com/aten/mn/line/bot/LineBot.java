@@ -3,6 +3,7 @@ package com.aten.mn.line.bot;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.math.BigDecimal;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.security.cert.X509Certificate;
 import java.text.DecimalFormat;
@@ -27,6 +28,7 @@ public class LineBot {
 	private final String graviexTickerApi = "https://graviex.net:443//api/v2/tickers.json";
 	private final String cryptopiaTickerApi = "https://www.cryptopia.co.nz/api/GetMarket/";
 	private final String bxTickerApi = "https://bx.in.th/api/";
+	private final String bxImageApi = "http://66.42.61.53:8080/api/bx/coin/btc";
 	private DecimalFormat df0 = new DecimalFormat("#,##0");
 	private DecimalFormat df = new DecimalFormat("#,##0.00");
 	private DecimalFormat df9 = new DecimalFormat("#,##0.000000000");
@@ -36,12 +38,13 @@ public class LineBot {
 	private List<CoinModel> listCb = null;
 	private List<CoinModel> listCp = null;
 	private List<CoinModel> listBx = null;
+	private CoinModel imageBx = null;
 	private String messageMno = "";
 	private boolean chkImage;
 
 	public static void main(String[] args) {
 		LineBot bot = new LineBot();
-		bot.genData("CDM",true);
+		bot.genData("BTC",true);
 
 		//		CoinModel coinModel = new CoinModel();
 		//		coinModel.setName("BTC");
@@ -49,6 +52,7 @@ public class LineBot {
 	}
 
 	public String genData(String coin, boolean chkImage) {
+		imageBx = null;
 		this.chkImage = chkImage;
 		String message = "";
 		loadFixData();
@@ -104,6 +108,18 @@ public class LineBot {
 					System.out.println("r5 exiting.");
 				}
 			};
+			Runnable r6 = new Runnable() {
+				@Override
+				public void run() {
+					if(coin.toUpperCase().equals("BTC")) {
+						CoinModel modelBX = new CoinModel();
+						modelBX.setName(coin.toUpperCase());
+						modelBX.setKey(coin.toUpperCase());
+						imageBX(modelBX);
+					}
+					System.out.println("r6 exiting.");
+				}
+			};
 			Thread t1 = new Thread(r1);
 			t1.start();
 			Thread t2 = new Thread(r2);
@@ -114,11 +130,14 @@ public class LineBot {
 			t4.start();
 			Thread t5 = new Thread(r5);
 			t5.start();
+			Thread t6 = new Thread(r6);
+			t6.start();
 			System.out.println("Thread One is alive: " + t1.isAlive());
 			System.out.println("Thread Two is alive: " + t2.isAlive());
 			System.out.println("Thread Three is alive: " + t3.isAlive());
 			System.out.println("Thread Four is alive: " + t4.isAlive());	
-			System.out.println("Thread Five is alive: " + t5.isAlive());			
+			System.out.println("Thread Five is alive: " + t5.isAlive());		
+			System.out.println("Thread Six is alive: " + t6.isAlive());			
 			try {
 				System.out.println("Waiting for threads to finish.");
 				t1.join();
@@ -126,6 +145,7 @@ public class LineBot {
 				t3.join();
 				t4.join();
 				t5.join();
+				t6.join();
 			} catch (InterruptedException e) {
 				System.out.println("Main thread Interrupted");
 			}
@@ -319,8 +339,8 @@ public class LineBot {
 
 			int statusCode = connection.getResponseCode();
 			if (statusCode == 200) {
-//				String responseMsg = connection.getResponseMessage();
-//				System.out.println(responseMsg);
+				//				String responseMsg = connection.getResponseMessage();
+				//				System.out.println(responseMsg);
 				BufferedReader in = new BufferedReader(
 						new InputStreamReader(connection.getInputStream()));
 				String inputLine;
@@ -452,13 +472,13 @@ public class LineBot {
 						for(String a:dataArray) {
 							if(a.contains("Coins locked")) {
 								String temp_01 = a.split(" : ")[1];
-//								System.out.println("temp_01 : "+temp_01);
+								//								System.out.println("temp_01 : "+temp_01);
 								String temp_02 = temp_01.split(" ")[1];
-//								System.out.println("temp_02 : "+temp_02);
+								//								System.out.println("temp_02 : "+temp_02);
 								String temp_03 = temp_02.replaceAll("\\(", "");
-//								System.out.println("temp_03 : "+temp_03);
+								//								System.out.println("temp_03 : "+temp_03);
 								String temp_04 = temp_03.replaceAll("%\\)", "");
-//								System.out.println("temp_04 : "+temp_04);
+								//								System.out.println("temp_04 : "+temp_04);
 								coinsLocked = Double.parseDouble(temp_04);
 							}
 						}
@@ -496,10 +516,10 @@ public class LineBot {
 										.replaceAll("\"", "");
 							}					
 						}
-//						System.out.println("date : "+date);
-//						System.out.println("node : "+node);
-//						System.out.println("roi : "+roi);
-//						System.out.println("price : "+price);
+						//						System.out.println("date : "+date);
+						//						System.out.println("node : "+node);
+						//						System.out.println("roi : "+roi);
+						//						System.out.println("price : "+price);
 						String[] dateArray = date.split(",");
 						String[] nodeArray = node.split(",");
 						String[] roiArray = roi.split(",");
@@ -530,11 +550,11 @@ public class LineBot {
 							}
 							j++;								
 						}
-//						for(int i=0;i<lable.length;i++) {
-//							System.out.println(i+" : "+lable[i]+", "+value[i]+", "+node2[i]);
-//						}
-//						System.out.println("maxNode : "+maxNode);
-//						System.out.println("maxPrice : "+maxPrice);
+						//						for(int i=0;i<lable.length;i++) {
+						//							System.out.println(i+" : "+lable[i]+", "+value[i]+", "+node2[i]);
+						//						}
+						//						System.out.println("maxNode : "+maxNode);
+						//						System.out.println("maxPrice : "+maxPrice);
 						Charts charts = new Charts();
 						maxPrice = maxPrice-(maxPrice % 10);
 						maxNode = maxNode-(maxNode % 10);
@@ -544,8 +564,8 @@ public class LineBot {
 					e.printStackTrace();
 				}
 
-//				System.out.println("messageMno : ");
-//				System.out.println(messageMno);
+				//				System.out.println("messageMno : ");
+				//				System.out.println(messageMno);
 			} else {
 				throw new Exception("Error:(StatusCode)" + statusCode + ", " + connection.getResponseMessage());
 			}
@@ -827,8 +847,8 @@ public class LineBot {
 
 			int statusCode = connection.getResponseCode();
 			if (statusCode == 200) {
-//				String responseMsg = connection.getResponseMessage();
-//				System.out.println(responseMsg);
+				//				String responseMsg = connection.getResponseMessage();
+				//				System.out.println(responseMsg);
 				BufferedReader in = new BufferedReader(
 						new InputStreamReader(connection.getInputStream()));
 				String inputLine;
@@ -869,5 +889,67 @@ public class LineBot {
 			System.out.println(e.getMessage());
 		}
 		return listBx;
+	}
+
+	public CoinModel imageBX(CoinModel coinModel) {
+		imageBx = new CoinModel();
+		try {
+			URL url = new URL(bxImageApi);
+			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+			connection.setConnectTimeout(1000*5);
+			//			connection.addRequestProperty("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
+			connection.addRequestProperty("Accept-Encoding", "UTF-8");
+			//			connection.setRequestProperty("Content-Type", "text/javascript;charset=utf-8");
+			//			connection.addRequestProperty("Accept-Language", "th,en-US;q=0.7,en;q=0.3");
+			//			connection.addRequestProperty("Connection", "keep-alive");
+			//			connection.addRequestProperty("Cookie", "__cfduid=d43bb2d54a4db06b0cc58316974df11c61508775856; bxsound=0;");
+			//			connection.addRequestProperty("PHPSESSID", "csvvhiqg0vqup5kp4496k53dqn");
+			//			connection.addRequestProperty("Cache-Control", "max-age=0");
+			//			connection.addRequestProperty("Host", "bx.in.th");
+			//			connection.addRequestProperty("Upgrade-Insecure-Requests", "1");
+			connection.addRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:61.0) Gecko/20100101 Firefox/61.0");
+			connection.setDoOutput(true);
+			connection.setDoInput(true);
+			connection.connect();
+
+			int statusCode = connection.getResponseCode();
+			if (statusCode == 200) {
+				BufferedReader in = new BufferedReader(
+						new InputStreamReader(connection.getInputStream()));
+				String inputLine;
+				StringBuffer response = new StringBuffer();
+				while ((inputLine = in.readLine()) != null) {
+					response.append(inputLine);
+				}
+				in.close();
+
+				String jsonData = response.toString();
+				JSONObject json = new JSONObject(jsonData);
+				String url01 = json.getString("url01");
+				String url02 = json.getString("url02");
+				String url03 = json.getString("url03");
+				imageBx = coinModel;
+				imageBx.setUrlImage01(url01);
+				imageBx.setUrlImage02(url02);
+				imageBx.setUrlImage03(url03);
+				System.out.println(imageBx.getUrlImage01());
+				System.out.println(imageBx.getUrlImage02());
+				System.out.println(imageBx.getUrlImage03());
+			} else {
+				throw new Exception("Error:(StatusCode)" + statusCode + ", " + connection.getResponseMessage());
+			}
+			connection.disconnect();
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+		return imageBx;
+	}
+
+	public CoinModel getImageBx() {
+		return imageBx;
+	}
+
+	public void setImageBx(CoinModel imageBx) {
+		this.imageBx = imageBx;
 	}
 }

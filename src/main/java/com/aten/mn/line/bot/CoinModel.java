@@ -17,6 +17,9 @@ public class CoinModel {
     private int[] changeBlock;
     private int[] changeCollateral;
     private long maxsupply;
+    private String urlImage01;
+    private String urlImage02;
+    private String urlImage03;
 
     public String getName() {
         return name;
@@ -81,6 +84,28 @@ public class CoinModel {
 	public void setMaxsupply(long maxsupply) {
 		this.maxsupply = maxsupply;
 	}
-    
-    
+
+	public String getUrlImage01() {
+		return urlImage01;
+	}
+
+	public void setUrlImage01(String urlImage01) {
+		this.urlImage01 = urlImage01;
+	}
+
+	public String getUrlImage02() {
+		return urlImage02;
+	}
+
+	public void setUrlImage02(String urlImage02) {
+		this.urlImage02 = urlImage02;
+	}
+
+	public String getUrlImage03() {
+		return urlImage03;
+	}
+
+	public void setUrlImage03(String urlImage03) {
+		this.urlImage03 = urlImage03;
+	}
 }
