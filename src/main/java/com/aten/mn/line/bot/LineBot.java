@@ -41,7 +41,7 @@ public class LineBot {
 
 	public static void main(String[] args) {
 		LineBot bot = new LineBot();
-		bot.genData("CDM",true);
+		bot.genData("GOSS",true);
 
 		//		CoinModel coinModel = new CoinModel();
 		//		coinModel.setName("BTC");
@@ -327,6 +327,7 @@ public class LineBot {
 				StringBuffer response = new StringBuffer();
 				boolean chk = false;
 				boolean chkVolume = false;
+				boolean chkActiveMN = false;
 				int index = 0;
 				int numberChart = 45;
 				String[] responseChart = new String[numberChart];
@@ -343,7 +344,7 @@ public class LineBot {
 						chk = true;
 						response.append("AVG Reward: ");
 					}else if(inputLine.contains("Active masternodes:")) {
-						chk = true;
+						chkActiveMN = true;
 						response.append(inputLine);
 					}else if(inputLine.contains("Supply:")) {
 						chk = true;
@@ -373,6 +374,10 @@ public class LineBot {
 								chkVolume = false;
 								response.append(inputLine+"\n");
 							}
+						}
+						if(chkActiveMN) {
+							inputLine = inputLine.split(" - ")[0];
+							response.append(inputLine+"\n");
 						}
 					}	
 
@@ -678,7 +683,7 @@ public class LineBot {
 						JSONObject ticker = head.getJSONObject("ticker");
 						String buy = ticker.getString("buy");
 						String sell = ticker.getString("sell");
-						String change = ticker.getString("change");
+						Double change = ticker.getDouble("change");
 						CoinModel model = new CoinModel();
 						buy = df9.format(Double.parseDouble(buy));
 						buy = (buy.substring(0, buy.length() - 1) + "'" + buy.substring(buy.length() - 1, buy.length()));
@@ -687,7 +692,7 @@ public class LineBot {
 						model.setName(coinModel.getName()+" (GV)");
 						model.setBuy(buy);
 						model.setSell(sell);
-						model.setChange(df.format(Double.parseDouble(change)));
+						model.setChange(df.format(change));
 						listGv.add(model);
 					}
 				}
