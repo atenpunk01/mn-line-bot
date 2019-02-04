@@ -70,6 +70,7 @@ public class Application extends SpringBootServletInitializer {
 				balasChatDenganRandomJawaban(replyToken, jawaban,null,null);
 			}
 		}catch (Exception e) {
+			e.printStackTrace();
 			System.out.println("ERROR : "+e.getMessage());
 		}
 
