@@ -929,34 +929,22 @@ public class LineBot {
 				String image01 = json.getString("image01");
 				String image02 = json.getString("image02");
 				String image03 = json.getString("image03");
-				System.out.println("image01 : "+image01);
-				System.out.println("image02 : "+image02);
-				System.out.println("image03 : "+image03);
+//				System.out.println("image01 : "+image01);
+//				System.out.println("image02 : "+image02);
+//				System.out.println("image03 : "+image03);
 				if(image01!=null && !image01.equals("")) {
-//					int indexofnewline = image01.indexOf("FFD8");
-//					if (indexofnewline > 0) {
-//						image01 = image01.substring(indexofnewline, image01.length());
-//					}
 					byte[] imageArray = toBinArray(image01);
 					Coin coin = new Coin();
 					coin.setData(imageArray);
 					imageBx.add(coin);
 				}
 				if(image02!=null && !image02.equals("")) {
-//					int indexofnewline = image02.indexOf("FFD8");
-//					if (indexofnewline > 0) {
-//						image02 = image02.substring(indexofnewline, image02.length());
-//					}
 					byte[] imageArray = toBinArray(image02);
 					Coin coin = new Coin();
 					coin.setData(imageArray);
 					imageBx.add(coin);
 				}
 				if(image03!=null && !image03.equals("")) {
-//					int indexofnewline = image03.indexOf("FFD8");
-//					if (indexofnewline > 0) {
-//						image03 = image03.substring(indexofnewline, image03.length());
-//					}
 					byte[] imageArray = toBinArray(image03);
 					Coin coin = new Coin();
 					coin.setData(imageArray);
