@@ -41,7 +41,7 @@ public class LineBot {
 
 	public static void main(String[] args) {
 		LineBot bot = new LineBot();
-		bot.genData("GOSS",true);
+		bot.genData("CDM",true);
 
 		//		CoinModel coinModel = new CoinModel();
 		//		coinModel.setName("BTC");
@@ -319,8 +319,8 @@ public class LineBot {
 
 			int statusCode = connection.getResponseCode();
 			if (statusCode == 200) {
-				String responseMsg = connection.getResponseMessage();
-				System.out.println(responseMsg);
+//				String responseMsg = connection.getResponseMessage();
+//				System.out.println(responseMsg);
 				BufferedReader in = new BufferedReader(
 						new InputStreamReader(connection.getInputStream()));
 				String inputLine;
@@ -376,6 +376,7 @@ public class LineBot {
 							}
 						}
 						if(chkActiveMN) {
+							chkActiveMN = false;
 							inputLine = inputLine.split(" - ")[0];
 							response.append(inputLine+"\n");
 						}
@@ -451,17 +452,17 @@ public class LineBot {
 						for(String a:dataArray) {
 							if(a.contains("Coins locked")) {
 								String temp_01 = a.split(" : ")[1];
-								System.out.println("temp_01 : "+temp_01);
+//								System.out.println("temp_01 : "+temp_01);
 								String temp_02 = temp_01.split(" ")[1];
-								System.out.println("temp_02 : "+temp_02);
+//								System.out.println("temp_02 : "+temp_02);
 								String temp_03 = temp_02.replaceAll("\\(", "");
-								System.out.println("temp_03 : "+temp_03);
+//								System.out.println("temp_03 : "+temp_03);
 								String temp_04 = temp_03.replaceAll("%\\)", "");
-								System.out.println("temp_04 : "+temp_04);
+//								System.out.println("temp_04 : "+temp_04);
 								coinsLocked = Double.parseDouble(temp_04);
 							}
 						}
-						
+
 						String date = "";
 						String node = "";
 						String roi = "";
@@ -495,10 +496,10 @@ public class LineBot {
 										.replaceAll("\"", "");
 							}					
 						}
-						System.out.println("date : "+date);
-						System.out.println("node : "+node);
-						System.out.println("roi : "+roi);
-						System.out.println("price : "+price);
+//						System.out.println("date : "+date);
+//						System.out.println("node : "+node);
+//						System.out.println("roi : "+roi);
+//						System.out.println("price : "+price);
 						String[] dateArray = date.split(",");
 						String[] nodeArray = node.split(",");
 						String[] roiArray = roi.split(",");
@@ -529,22 +530,22 @@ public class LineBot {
 							}
 							j++;								
 						}
-						for(int i=0;i<lable.length;i++) {
-							System.out.println(i+" : "+lable[i]+", "+value[i]+", "+node2[i]);
-						}
-						System.out.println("maxNode : "+maxNode);
-						System.out.println("maxPrice : "+maxPrice);
+//						for(int i=0;i<lable.length;i++) {
+//							System.out.println(i+" : "+lable[i]+", "+value[i]+", "+node2[i]);
+//						}
+//						System.out.println("maxNode : "+maxNode);
+//						System.out.println("maxPrice : "+maxPrice);
 						Charts charts = new Charts();
 						maxPrice = maxPrice-(maxPrice % 10);
 						maxNode = maxNode-(maxNode % 10);
-						charts.genImage(coin,lable,value,node2,coinsLocked,(maxNode+(maxNode/8)),(maxPrice+(maxPrice/8)));
+						charts.genImage(coin,lable,value,node2,coinsLocked,(int)(maxNode+(maxNode/8)),(int)(maxPrice+(maxPrice/8)));
 					}
 				}catch (Exception e) {
 					e.printStackTrace();
 				}
 
-
-				//				System.out.println(messageMno);
+//				System.out.println("messageMno : ");
+//				System.out.println(messageMno);
 			} else {
 				throw new Exception("Error:(StatusCode)" + statusCode + ", " + connection.getResponseMessage());
 			}
@@ -826,8 +827,8 @@ public class LineBot {
 
 			int statusCode = connection.getResponseCode();
 			if (statusCode == 200) {
-				String responseMsg = connection.getResponseMessage();
-				System.out.println(responseMsg);
+//				String responseMsg = connection.getResponseMessage();
+//				System.out.println(responseMsg);
 				BufferedReader in = new BufferedReader(
 						new InputStreamReader(connection.getInputStream()));
 				String inputLine;
