@@ -60,7 +60,7 @@ public class Application extends SpringBootServletInitializer {
 				}
 				LineBot lineBot = new LineBot(); 
 				String message = lineBot.genData(coin,true);
-				List<Coin> imageList = lineBot.getImageBx();
+				List<String> imageList = lineBot.getImageBx();
 				if(message==null || message.equals("")) {
 					message = coin.toUpperCase()+" not found data";
 				}
@@ -102,7 +102,7 @@ public class Application extends SpringBootServletInitializer {
 		}
 	}
 
-	private void balasChatDenganRandomJawaban(String replyToken, String jawaban, String coin, List<Coin> imageList){
+	private void balasChatDenganRandomJawaban(String replyToken, String jawaban, String coin, List<String> imageList){
 		List<Message> messages = new ArrayList<Message>();
 		if(replyToken!=null && !replyToken.trim().equals("")) {
 			TextMessage jawabanDalamBentukTextMessage = new TextMessage(jawaban);
@@ -121,20 +121,8 @@ public class Application extends SpringBootServletInitializer {
 				}
 			}
 			if(imageList!=null) {
-				int index = 0;
-				for(Coin c:imageList) {
-					index++;
-					if(c!=null && c.getData()!=null) {
-						String name = "btc"+index;
-						c.setCoin(name);
-						for(Coin coinModel:Data.coinList) {
-							if(coinModel.getCoin().equals(name)) {
-								System.out.println("remove : "+Data.coinList.remove(coinModel));
-								break;
-							}
-						}
-						Data.coinList.add(c);
-						String url = "https://mn-line-bot.herokuapp.com/img/"+(sdf.format(new Date())+"?coin="+name);
+				for(String url:imageList) {
+					if(url!=null) {
 						ImageMessage imageMessage = new ImageMessage(url,url);
 						messages.add(imageMessage);
 					}

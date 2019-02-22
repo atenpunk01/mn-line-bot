@@ -39,7 +39,7 @@ public class LineBot {
 	private List<CoinModel> listCb = null;
 	private List<CoinModel> listCp = null;
 	private List<CoinModel> listBx = null;
-	private List<Coin> imageBx = null;
+	private List<String> imageBx = null;
 	private String messageMno = "";
 	private boolean chkImage;
 
@@ -893,7 +893,8 @@ public class LineBot {
 	}
 
 	public void imageBX(CoinModel coinModel) {
-		imageBx = new ArrayList<Coin>();
+//		imageBx = new ArrayList<Coin>();
+		imageBx = new ArrayList<String>();
 		try {
 			URL url = new URL(bxImageApi);
 			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -929,26 +930,29 @@ public class LineBot {
 				String image01 = json.getString("image01");
 				String image02 = json.getString("image02");
 				String image03 = json.getString("image03");
-//				System.out.println("image01 : "+image01);
-//				System.out.println("image02 : "+image02);
-//				System.out.println("image03 : "+image03);
+				System.out.println("image01 : "+image01);
+				System.out.println("image02 : "+image02);
+				System.out.println("image03 : "+image03);
 				if(image01!=null && !image01.equals("")) {
-					byte[] imageArray = toBinArray(image01);
-					Coin coin = new Coin();
-					coin.setData(imageArray);
-					imageBx.add(coin);
+//					byte[] imageArray = toBinArray(image01);
+//					Coin coin = new Coin();
+//					coin.setData(imageArray);
+//					imageBx.add(coin);
+					imageBx.add(image01);
 				}
 				if(image02!=null && !image02.equals("")) {
-					byte[] imageArray = toBinArray(image02);
-					Coin coin = new Coin();
-					coin.setData(imageArray);
-					imageBx.add(coin);
+//					byte[] imageArray = toBinArray(image02);
+//					Coin coin = new Coin();
+//					coin.setData(imageArray);
+//					imageBx.add(coin);
+					imageBx.add(image02);
 				}
 				if(image03!=null && !image03.equals("")) {
-					byte[] imageArray = toBinArray(image03);
-					Coin coin = new Coin();
-					coin.setData(imageArray);
-					imageBx.add(coin);
+//					byte[] imageArray = toBinArray(image03);
+//					Coin coin = new Coin();
+//					coin.setData(imageArray);
+//					imageBx.add(coin);
+					imageBx.add(image03);
 				}
 			} else {
 				throw new Exception("Error:(StatusCode)" + statusCode + ", " + connection.getResponseMessage());
@@ -974,11 +978,11 @@ public class LineBot {
 		return bArray;
 	}
 
-	public List<Coin> getImageBx() {
+	public List<String> getImageBx() {
 		return imageBx;
 	}
 
-	public void setImageBx(List<Coin> imageBx) {
+	public void setImageBx(List<String> imageBx) {
 		this.imageBx = imageBx;
 	}
 
