@@ -9,6 +9,8 @@ import java.util.Locale;
 import java.util.Random;
 import java.util.concurrent.ExecutionException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -35,6 +37,8 @@ public class Application extends SpringBootServletInitializer {
 	private LineMessagingClient lineMessagingClient;
 
 	private SimpleDateFormat sdf = new SimpleDateFormat("yyyymmddHHmmssSSS",Locale.US);
+	
+	private final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 
 	@Override
 	protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
