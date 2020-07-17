@@ -52,6 +52,12 @@ public class Application extends SpringBootServletInitializer {
 		try {
 			String pesan = messageEvent.getMessage().getText().toLowerCase();
 
+			logger.info("messageEvent.getReplyToken() : "+messageEvent.getReplyToken());
+			logger.info("messageEvent.getMessage().getId() : "+messageEvent.getMessage().getId());
+			logger.info("messageEvent.getMessage().getText() : "+messageEvent.getMessage().getText());
+			logger.info("messageEvent.getSource().getSenderId() : "+messageEvent.getSource().getSenderId());
+			logger.info("messageEvent.getSource().getUserId() : "+messageEvent.getSource().getUserId());
+
 			if(pesan.startsWith("/")) {
 				String coin = pesan.startsWith("/p ")?pesan.split(" ")[1]:pesan.substring(1, pesan.length());				
 				System.out.println("coin : "+coin);
@@ -65,6 +71,7 @@ public class Application extends SpringBootServletInitializer {
 					message = coin.toUpperCase()+" not found data";
 				}
 				String replyToken = messageEvent.getReplyToken();
+				logger.info("replyToken : "+replyToken);
 				balasChatDenganRandomJawaban(replyToken, message,coin.toUpperCase(),imageList);
 			}else if(pesan.equals("atenpunk")){
 				String jawaban = getRandomJawaban();
