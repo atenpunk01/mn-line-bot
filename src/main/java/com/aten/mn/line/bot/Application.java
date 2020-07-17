@@ -52,6 +52,7 @@ public class Application extends SpringBootServletInitializer {
 		try {
 			String pesan = messageEvent.getMessage().getText().toLowerCase();
 
+			logger.info("messageEvent.getMessage().getText().toLowerCase() : "+pesan);
 			logger.info("messageEvent.getReplyToken() : "+messageEvent.getReplyToken());
 			logger.info("messageEvent.getMessage().getId() : "+messageEvent.getMessage().getId());
 			logger.info("messageEvent.getMessage().getText() : "+messageEvent.getMessage().getText());
