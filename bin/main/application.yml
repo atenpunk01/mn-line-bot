@@ -17,14 +17,14 @@
 #Please copy as `application.yml` and change your value.
 
 #line.bot:
-#  channel-token: dEKqNnLrnTyiRsDsSiipUVoaWRLyfPoIyJG2YQG7dw1DPtS0r601zjHQI5ZJ7m7L1JdOWHZu3bItvsmiS2hMwQaRbedClDToc2ybq3r4nIOH5AKTV8K3GwepWKZQPCFFCc8Uht35HvBr7h1GA+IC/QdB04t89/1O/w1cDnyilFU=
-#  channel-secret: 524505ebdac42ed73fc7551174faecf4
+#  channel-token: 5cZDRG6sKJNWe/+2plbkQq5XoualYDEUeszt/VfB7FDgEtIv3uf+nr7z5wq+3oGIiplSDHTeRZZhNhUDOlCCmwWMz4Pg1IxoCTCD6kUYyi5jTn7fejUdjxzc5VqvuLdgGveufaO1WWIidwSmZt5jeQdB04t89/1O/w1cDnyilFU=
+#  channel-secret: edc04a65a9d4daad51a96b1d8466708a
 #  handler.path: /callback
 
 
 line.bot:
-  channel-token: 5cZDRG6sKJNWe/+2plbkQq5XoualYDEUeszt/VfB7FDgEtIv3uf+nr7z5wq+3oGIiplSDHTeRZZhNhUDOlCCmwWMz4Pg1IxoCTCD6kUYyi5jTn7fejUdjxzc5VqvuLdgGveufaO1WWIidwSmZt5jeQdB04t89/1O/w1cDnyilFU=
-  channel-secret: edc04a65a9d4daad51a96b1d8466708a
+  channel-token: tHnOYJEWy8eSMmQV5r6vzjzRgtTNADXl3ONxvl2fSTISeFyVRn/A8n0uGJ90ld2mh9dd1/3RGwo2mBhqxLvuD5wqnvHJ2x508yjsg5vMI4K8RNiTDM6PjDLOhk4Tjm9aoMnlskRJq3M+D3nbZi/urAdB04t89/1O/w1cDnyilFU=
+  channel-secret: 7744bff9f65ab3878e6c1478b3085e66
   handler.path: /callback
 
 # To remove Client wire logs. Please comment out following lines.
